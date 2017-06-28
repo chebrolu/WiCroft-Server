@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <script>
+
+        function hai() {
+            var one = document.getElementById("_all");
+//            alert("start");
+            if (one.checked) {
+
+                var ele = document.getElementsByName("one");
+                var i;
+                for (i = 0; i < ele.length; i++) {
+                    ele[i].checked = true;
+                }
+
+
+
+//                document.getElementById("two").checked = true;
+            } else {
+                var ele = document.getElementsByName("one");
+                var i;
+                for (i = 0; i < ele.length; i++) {
+                    ele[i].checked = false;
+                }
+//                document.getElementById("two").checked = false;
+            }
+//            alert("end");
+        }
+
+    </script>
+    <body>
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <form action='' method='get'>
+
+            Select All<input type='checkbox' onclick='hai();' name='all' id='_all'/><br/>
+            1:<input type='checkbox' name='one' id='two'/><br/>
+            2:<input type='checkbox' name='one' id='two'/><br/>
+            3:<input type='checkbox' name='one' id='two'/><br/>
+            4:<input type='checkbox' name='one' id='two'/><br/>
+        </form>
+    </body>
+</html>

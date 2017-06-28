@@ -1,2 +1,0 @@
-# Wicroft
-Server source code
