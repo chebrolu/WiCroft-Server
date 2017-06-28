@@ -1,2 +1,2 @@
 # Wicroft
-MTP client and server source code
+Server source code
