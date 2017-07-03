@@ -1,4 +1,8 @@
-
+<%-- 
+    Document   : startExperiment
+    Created on : 22 Jul, 2016, 5:59:41 PM
+    Author     : ratheeshkv
+--%>
 
 <%@page import="java.sql.ResultSet"%>
 <%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
@@ -13,7 +17,7 @@
 <%@page import="java.util.Date"%>
 <html>
     <head>
-        <Title>Just A Time</Title>
+        <Title>Wicroft</Title>
          
    </head>
     <body>
@@ -22,24 +26,17 @@
      if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
-//            response.setIntHeader("refresh", 5); // refresh in every 5 seconds
-            
+
             String uname = (String)session.getAttribute("currentUser");
             Session mySssn = initilizeServer.getUserNameToSessionMap().get(uname);
 
     %>
 
-
     <b>[Server Time &nbsp;:&nbsp; <%
                         Date date = new Date();
                         out.write(date.toString());
                         out.write("["+mySssn.getChangeApSelectedClients().size()+"]");
-                        // System.out.println("HAHAHA");
     %> ]<br>
-
-    <!-- [Total clients : <% out.write(mySssn.getChangeApSelectedClients().size());%>] -->
-
-
 
 
     </b>

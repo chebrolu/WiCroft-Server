@@ -1,3 +1,8 @@
+<%-- 
+    Document   : processAction
+    Created on : 22 Jul, 2016, 3:12:54 PM
+    Author     : ratheeshkv
+--%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.io.*,java.util.*, javax.servlet.*" %>
 <%@ page import="javax.servlet.http.*" %>
@@ -8,20 +13,6 @@
 <%@ page import="com.iitb.cse.*" %>
 
 <%
-
-  /* if(session.getAttribute("currentUser")==null){
-            response.sendRedirect("login.jsp");
-        }else{
-            
-            String username = (String)session.getAttribute("currentUser");
-            Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
-              if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
-
-            }else{
-        */
-
 
     String expID = null, macAddress = null;
 
@@ -69,26 +60,15 @@
                 System.out.println("File Upload :=> Error while getting parameters");
             } else {
 
-
-//                if (expID.equals("Debug_logs")) {
-//                    expID = expID + "/NEW";
-//                }
-
-                
-                
                 expDir = filePath;
                 File theDir = new File(filePath);
                 if (!theDir.exists()) {
                     theDir.mkdirs();
                 }
                 
-                
-                
                 System.out.println("Location : "+theDir.getAbsolutePath());
                 System.out.println("Exp ID  : "+expID);
                 System.out.println("MacAddress : "+macAddress);
-                
-                
                 
                 if (!expID.contains("Debug_logs") && !expID.contains("ConnectionLog") ) {
                     // expID = uid_expid
@@ -139,8 +119,6 @@
                             fi.write(file);
                         }
                     }
-                    
-                    
 
                     System.out.println("File Upload :=> " + expID + "(debug) " + macAddress + " Successfully");
                     DeviceInfo device = initilizeServer.getAllConnectedClients().get(macAddress);
@@ -150,7 +128,6 @@
                     details += " , Received [" + expID + "]";
                     System.out.println("\nDetails : " + details);
                     device.setDetails(details);
-                //    mySession.getRequestLogFileFilteredClients().put(macAddress,details);
                 }else { // old app
                         System.out.println("File Upload[Old App] :=> " + expID + "(debug) " + macAddress + " Failed");
                         response.setStatus(response.SC_REQUEST_URI_TOO_LONG);
@@ -158,10 +135,7 @@
 
 
                 } else { //  Dedug and connection logs
-                    // debug 
-                    // expID = Debug_logs / ConnectionLog
-                    // macaddress = mac_time
-                    
+
                     if (filePath.endsWith("/")) {
                         filePath = filePath + expID + "/";
                     } else {
@@ -201,18 +175,7 @@
                     details += " , Received [" + expID + "]";
                     System.out.println("\nDetails : " + details);
                     device.setDetails(details);
-//                    
-//
-//                    String mac[] = macAddress.split("_");
-//                    System.out.println("\nMAC : " + mac[0]);
-//                    DeviceInfo device = initilizeServer.getAllConnectedClients().get(mac[0]);
-//
-//                    String details = "";//device.getDetails();
-//                    details += " , Received [" + expID + "]";
-//                    System.out.println("\nDetails : " + details);
-//                    device.setDetails(details);
                     System.out.println("File Upload :=> " + expID + "(debug) " + macAddress + " Successfully");
-                //    mySession.getRequestLogFileFilteredClients().put(mac[0],details);
                 }
             }
         } catch (Exception ex) {
@@ -221,9 +184,7 @@
             
             System.out.println(ex);
         }
-
-}
-  
+} 
 
 %>
  

@@ -11,7 +11,6 @@ import java.util.Date;
  *
  */
 public class Experiment {
-//userid,name,location,description,fileid,filename,status,expid
     
     @Getter
     @Setter

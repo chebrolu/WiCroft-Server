@@ -1,7 +1,7 @@
 <%-- 
     Document   : configParametersStatus
     Created on : 16 Sep, 2016, 12:48:26 AM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page import="com.iitb.cse.Utils"%>
@@ -12,7 +12,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <h1>Hello World!</h1>
@@ -57,11 +57,8 @@
                     out.write(msg + " = " + x + "\n");
 
                 }
-
                 Utils.sendServerConfiguration(serverIP, serverPORT, connectionPORT);
-
             }
-
 
         %>
     </body>

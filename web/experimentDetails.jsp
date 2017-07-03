@@ -25,22 +25,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,7 +64,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -72,7 +72,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -89,18 +91,47 @@
                 </ul>
                 <!-- /.navbar-top-links -->
 
-              
+               
                 <!-- /.navbar-static-side -->
-                
                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
 
     <%
         if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
-            //response.setIntHeader("refresh", 5); // refresh in every 5 seconds
             
             String username = (String)session.getAttribute("currentUser");
             Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
@@ -111,8 +142,6 @@
             }else{
 
     %>
-
-
             <div id="page-wrapper">
                 <div class="row">
                     <br/> 
@@ -139,7 +168,7 @@
                 </div>
 
                     <div class="col-lg-12">
-                    <form action="deleteExperiments.jsp" method="get">
+                    <form action="deleteExperiments.jsp" method="get" onsubmit="return checkExp()">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <b> Experiment History</b> &emsp;&emsp;
@@ -148,10 +177,7 @@
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <!-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example"> -->
-                                <!-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example"> -->
-                                <table class="table table-striped" style="overflow: auto;width: 100%; height:500px;display: block" >
- <!-- expid,name,date_format(starttime,'%d:%m:%Y %H:%i:%s'),date_format(endtime,'%d:%m:%Y %H:%i:%s'),location,description,fileid,filename,status,creationtime  -->
-
+                                <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
                                             <th  style="display: none">#</th>
@@ -169,47 +195,45 @@
                                     </thead>
                                     <tbody>
 
-                                        <%
-                                               ResultSet rs = DBManager.getAllExperimentDetails(username);
-                                               String path = Constants.experimentDetailsDirectory;
-                                               if (!path.endsWith("/")) {
-                                                   path = path + "/";
-                                               }
-                                               if (!path.startsWith("/")) {
-                                                   path = "/" + path;
-                                               }
-                                               path = path +username+ "/controlFile/";
-                                               if (rs != null) {
-                                                   while (rs.next()) {
-                                                   String status = "";
-                                                   if(rs.getString(9).trim().equals("0")){
-                                                        status = "<td bgcolor='red'><b style='display:none'>" + rs.getString(9) + "</b></td>";
-                                                   }else if(rs.getString(9).trim().equals("1")){
-                                                        status = "<td bgcolor='yellow'><b style='display:none'>" + rs.getString(9) + "</b></td>";
-                                                   }else if(rs.getString(9).trim().equals("2")){
-                                                        status = "<td bgcolor='green'><b style='display:none'>" + rs.getString(9) + "</b></td>";
-                                                   }
+                    <%
+                           ResultSet rs = DBManager.getAllExperimentDetails(username);
+                           String path = Constants.experimentDetailsDirectory;
+                           if (!path.endsWith("/")) {
+                               path = path + "/";
+                           }
+                           if (!path.startsWith("/")) {
+                               path = "/" + path;
+                           }
+                           path = path +username+ "/controlFile/";
+                           if (rs != null) {
+                               while (rs.next()) {
+                               String status = "";
+                               if(rs.getString(9).trim().equals("0")){
+                                    status = "<td bgcolor='red'><b style='display:none'>" + rs.getString(9) + "</b></td>";
+                               }else if(rs.getString(9).trim().equals("1")){
+                                    status = "<td bgcolor='yellow'><b style='display:none'>" + rs.getString(9) + "</b></td>";
+                               }else if(rs.getString(9).trim().equals("2")){
+                                    status = "<td bgcolor='green'><b style='display:none'>" + rs.getString(9) + "</b></td>";
+                               }
 
-                                    
-                                    // id, starttime, endtime, name,location,description,fileid,filename                                                   
+                
+                           out.write("<tr><td  style='display: none'></td>"
+                           +((rs.getString(9).trim().equals("0"))?"<td><input type='checkbox' name='selectedclients' value='"+rs.getString(1)+"'/></td>":"<td></td>")
+                           +"<td>"+ ((rs.getString(9)==null || rs.getString(9).equals("0"))?rs.getString(1):"<a href=\"experimentView.jsp?expid="+ rs.getString(1) + "\">" + rs.getString(1) + "</a>" )+"</td>"
+                           +"<td>"+((rs.getString(7)==null || rs.getString(7).trim().equals("-1"))?"-No File Chosen-":"<a href=\"download.jsp?path=" + path + "&fileid=" + rs.getString(7) + "&name="+rs.getString(8)+" \" >" + "File ID:"+rs.getString(7)+ "</a>")+"</td>"
+                           +"<td>" + rs.getString(2) + "</td>"
+                           +"<td>" + rs.getString(10) + "</td>"
+                           +"<td>" + ((rs.getString(3)==null||rs.getString(3).trim().equals(""))?"Not Started":rs.getString(3)) + "</td>"
+                           +"<td>" + ((rs.getString(4)==null||rs.getString(4).trim().equals(""))?"Not Stopped":rs.getString(4)) + "</td>"
+                           +"<td>" + ((rs.getString(5)==null || rs.getString(5).trim().equals(""))?"-no info-":rs.getString(5)) + "</td>"
+                           +"<td>" + ((rs.getString(6)==null || rs.getString(6).trim().equals(""))?"-no-info-":rs.getString(6)) + "</td>"
+                           + status
+                           +"</tr>");
 
-                                               out.write("<tr><td  style='display: none'></td>"
-                                               +((rs.getString(9).trim().equals("0"))?"<td><input type='checkbox' name='selectedclients' value='"+rs.getString(1)+"'/></td>":"<td></td>")
-                                               +"<td>"+ ((rs.getString(9)==null || rs.getString(9).equals("0"))?rs.getString(1):"<a href=\"experimentView.jsp?expid="+ rs.getString(1) + "\">" + rs.getString(1) + "</a>" )+"</td>"
-                                               +"<td>"+((rs.getString(7)==null || rs.getString(7).trim().equals("-1"))?"-No File Chosen-":"<a href=\"download.jsp?path=" + path + "&fileid=" + rs.getString(7) + "&name="+rs.getString(8)+" \" >" + "File ID:"+rs.getString(7)+ "</a>")+"</td>"
-                                               +"<td>" + rs.getString(2) + "</td>"
-                                               +"<td>" + rs.getString(10) + "</td>"
-                                               +"<td>" + ((rs.getString(3)==null||rs.getString(3).trim().equals(""))?"Not Started":rs.getString(3)) + "</td>"
-                                               +"<td>" + ((rs.getString(4)==null||rs.getString(4).trim().equals(""))?"Not Stopped":rs.getString(4)) + "</td>"
-                                               +"<td>" + ((rs.getString(5)==null || rs.getString(5).trim().equals(""))?"-no info-":rs.getString(5)) + "</td>"
-                                               +"<td>" + ((rs.getString(6)==null || rs.getString(6).trim().equals(""))?"-no-info-":rs.getString(6)) + "</td>"
-                                               + status
-                                               +"</tr>");
+                               }
+                           }
 
-                                                   }
-                                               }
-
-                                        %>  
+                    %>  
 
                                     </tbody>
                                 </table>
@@ -221,10 +245,6 @@
                         </form>
                         <!-- /.panel -->
                     </div>
-
-
-                    
-
 
                     <!-- /.col-lg-12 -->
                 </div>
@@ -241,28 +261,28 @@
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -273,12 +293,32 @@
             });
         </script>
 
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
+        </script>-->
+
+
+        <script type="text/javascript">
+            function checkExp(){
+                
+                var checkbox = document.getElementsByName('selectedclients');
+                var ln = 0;
+                for(var i=0; i< checkbox.length; i++) {
+                    if(checkbox[i].checked)
+                        ln++
+                }
+
+                if(ln>0){
+                    return true;
+                }else{
+                    alert("No saved experiment selected to delete!!!");
+                    return false;
+                }
+            }
         </script>
 
 

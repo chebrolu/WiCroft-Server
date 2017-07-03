@@ -1,7 +1,7 @@
 <%-- 
     Document   : saveExperiment
     Created on : 7 Jun, 2017, 2:48:35 AM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -28,7 +28,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <%
@@ -139,20 +139,13 @@
 // Experiment(int userid,String name,String location,String description,int fileid,String filename,int status,int expid)               
 // insert into experiments(userid,name,location,description,fileid,filename,status,expid,creationtime) values()               
                
-               
              } catch (FileUploadException ex) {
                  out.write(ex.toString());
              } catch (Exception ex) {
                  out.write(ex.toString());
              }
-
             
            response.sendRedirect("configExperiment.jsp?saveExpStatus="+saveExpStatus);
-
-                
-                            
-                            
-                    
 
         }}
 

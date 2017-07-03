@@ -21,8 +21,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css">
+        <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css">
     </head>
     <body>
 
@@ -41,21 +41,14 @@
                 int exp_number = 0;
                 String timeout = null;
                 String logBgTraffic = null;
-
-                /* 
-            out.write("Name : "+request.getParameter("exp_name"));
-            out.write("Location  : "+request.getParameter("exp_loc"));
-            out.write("Desc  : "+request.getParameter("exp_desc"));
-            out.write("Type : "+request.getParameter("filter"));
-                 */
+                
                 boolean multipart = ServletFileUpload.isMultipartContent(request);
                 DiskFileItemFactory factory = new DiskFileItemFactory();
-                factory.setSizeThreshold(50 * 1024 * 1024);
+                factory.setSizeThreshold(100 * 1024 * 1024);
                 File file;//= new File("/home/cse/Desktop/");
-                //   factory.setRepository(file);
 
                 ServletFileUpload upload = new ServletFileUpload(factory);
-                upload.setSizeMax(50 * 1024 * 1024);
+                upload.setSizeMax(100 * 1024 * 1024);
 
                 try {
                     List fileitem = upload.parseRequest(request);
@@ -63,13 +56,8 @@
                     int index = 0;
                     while (itr.hasNext()) {
 
-                        // out.write("<br/>Index : "+(++index));
                         FileItem item = (FileItem) itr.next();
-                        //  out.write("<br/>Name : " + item.getName() + " " + item.isFormField());
-
-//                    item.getString(string)
                         if (item.isFormField()) {
-                            //     out.write("Name : '" + item.getFieldName() + "'-'" + item.getName() + "' - '" + item.getString());
 
                             out.write("<br/>Name : " + item.getFieldName());
 
@@ -90,13 +78,6 @@
                                 logBgTraffic =  item.getString();
                             }
                             
-                            
-                            
-                            
-                            
-                            //out.write("Location  : " + item.getString("exp_loc"));
-                            //out.write("Desc  : " + item.getString("exp_desc"));
-                            //out.write("Type : " + item.getString("filter"));
                         } else {
 
                             if (Constants.experimentDetailsDirectory.endsWith("/")) {
@@ -110,11 +91,8 @@
                             }
 
                             if (item.getName() != null) {
-                                //       out.write("\nFile : " + file.getAbsolutePath() + "  -- " + item.getName());
-                                //file = new File(file.getAbsolutePath() + "/" + item.getName());
                                 file = new File(file.getAbsolutePath() + "/"+Constants.configFile);
                                 item.write(file);
-                                //    break;
                             }
                         }
                     }
@@ -126,7 +104,6 @@
 
                 Experiment experiment = new Experiment(exp_number, exp_name, exp_loc, exp_desc);
 
-                //  if (DBManager.addExperiment(exp_name, exp_loc, exp_desc)) {
                 if (DBManager.addExperiment(experiment)) {
                     out.write("<br/>DB Succss : Experiment added");
                 } else {
@@ -148,9 +125,6 @@
                         i++;
                     }
                 }
-            
-                
-                //Utils.startExperiment(experiment.getNumber());
                 
                 out.write("\n1"+experiment.getNumber());
                 out.write("\n2"+timeout);
@@ -161,50 +135,11 @@
                     Constants.currentSession.setExperimentRunning(true);
                     Constants.currentSession.setCurExperiment(experiment);
                     response.sendRedirect("experimentStatus.jsp");
-
-                  /* DBManager mgr = new DBManager();
-                   ResultSet    rs = DBManager.getControlFileStatus(mgr, experiment.getNumber());
-                   int total  = Constants.currentSession.getFilteredClients().size();
-                   int success = 0;
-                   int failed = 0 ;
-                   int pending = 0;
-                   
-                       if (rs != null) {
-                           
-                           while(rs.next()){
-                               
-                               if(rs.getString(1) == "1"){
-                                   success = Integer.parseInt(rs.getString(2));
-                               }else if(rs.getString(1) == "2"){
-                                   failed = Integer.parseInt(rs.getString(2));
-                               }
-                           }
-                       }
-                    mgr.closeConnection();
-                    pending = total - (success + failed); 
-                    out.write("<table>");
-                    out.write("<caption>Experiment Details</caption>");
-                    out.write("<tr><td>Number of Selected Clients</td><td>"+total+"</td></tr>");
-                    out.write("<tr><td>Control File Sending Success</td><td>"+ success +"</td></tr>");
-                    out.write("<tr><td>Control File Sending Pending</td><td>"+ pending +"</td></tr>");
-                    out.write("<tr><td>Control File Sending Failed</td><td>"+ failed +"</td></tr>");
-                    out.write("</table>");*/
                     
                 }else{
                     out.write("<h2>Starting Experiment Failed</h2>");
                      response.sendRedirect("failedExperiment.jsp");
-                   // Constants.currentSession.setExperimentRunning(false);
                 }
-
-            // clientcount
-            /*String arr[] = request.getParameterValues("selectedclient");
-            for (int i = 0; i < arr.length; i++) {
-                out.write("\nSelected : " + arr[i]);
-            }*/
-//            Utils.startExperiment();
-
- //           Utils.startRandomExperiment();
-
 
         %>
     </body>

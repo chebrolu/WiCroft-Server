@@ -31,22 +31,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -58,11 +58,7 @@
     </head>
 
     <body>
-
-        
-
         <div id="wrapper">
-
             <!-- Navigation -->
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -72,7 +68,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -102,7 +98,38 @@
                
                 <!-- /.navbar-static-side -->
                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
 
         <%
@@ -138,9 +165,9 @@
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Dashboard &emsp;
+                        <h2 class="page-header">Dashboard &emsp;
                             <a href="handleEvents.jsp?event=clearlist" class='btn btn-default' style="background-color: #e74c3c ;color: white;border-color:#e74c3c">Clear Client List</a>
-                            </h1>
+                            </h2>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -162,8 +189,7 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <!--                                    <span class="pull-left">View Details</span>
-                                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
@@ -184,8 +210,7 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <!--                                    <span class="pull-left">View Details</span>
-                                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
@@ -206,8 +231,7 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <!--                                    <span class="pull-left">View Details</span>
-                                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
@@ -217,9 +241,9 @@
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-xs-3">
+                                 <!--    <div class="col-xs-3">
                                         <i class="fa fa-clock-o fa-5x"></i>
-                                    </div>
+                                    </div> -->
                                     <div class="col-xs-9 text-right">
                                         <div class="huge"><b><%=(dateFormat.format(date))%></b></div>
                                         <div>Server Time</div>
@@ -228,54 +252,20 @@
                             </div>
                             <a href="#">
                                 <div class="panel-footer">
-                                    <!--                                    <span class="pull-left">View Details</span>
-                                                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span> -->
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                             </a>
                         </div>
                     </div>
 
-
-                    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 </div>
-
-
 
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="panel panel-primary">
                             <div class="panel-heading ">
-                                <b> AccessPoint Connection Information </b>
+                                <b> AccessPoint Information </b>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
@@ -354,7 +344,9 @@
                                         <i class="fa fa-clock-o fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div style="font-size: 30px;padding-top:8px;"><b><%=hour%>h &nbsp;<%=min%>m&nbsp; <%=sec%>s </b></div><br>
+                                        <!-- <div style="font-size: 30px;padding-top:8px;"><b><%=hour%>h &nbsp;<%=min%>m&nbsp; <%=sec%>s </b></div> -->
+                                        <div style="font-size: 30px;padding-top:8px;"><b><%=hour%>:<%=min%>:<%=sec%></b></div><br>
+
                                         <div><b>Wake Up Timer</b></div>
                                     </div>
                                 </div>
@@ -372,27 +364,6 @@
                             mySession.setWakeUpTimerRunning(false);
 
                     %>
-<!--
-                     <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-clock-o fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div  style='padding-top:15px;font-size: 20px'><b>Wake Up Timer Expired</b></div><br>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                </div>
-                            </a>
-                        </div>
-                    </div>  
--->
 
                     <%
                         }
@@ -400,8 +371,6 @@
 
                 </div>
                 <!--end Row -->
-
-
 
                 <br>
 
@@ -415,20 +384,14 @@
                     <div class="col-lg-12">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <b> Connected Clients Information</b>
+                                <b> Clients Information</b>
                             </div>
                             <!-- /.panel-heading -->
                             <div class="panel-body">
                                 <!-- <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example"> -->
-                                <table width="100%" class="table table-striped table-bordered table-hover" style="overflow: auto;width: 100%; height:250px;display: block">                                
+                                <table width="100%" class="table table-striped  table-hover" style="overflow: auto;width: 100%; height:225px;display: block">                                
 
                                     <thead>
-
-<!--                                    <tr>
-                                            <td colspan="8">
-                                                <a href="handleEvents.jsp?event=clearlist" class='btn btn-default' style="background-color: #e74c3c ;color: white;border-color:#e74c3c">Clear Client List</a>
-                                            </td>
-                                        </tr>-->
 
                                         <tr>
                                             <th>#</th>
@@ -454,9 +417,6 @@
                                             if (clients != null) {
                                                 Enumeration<String> macList = clients.keys();
 
-                                                //     out.write("<table border='1'>");
-                                                //                out.write("<tr><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th><th>Experiment status</th><th>Connection Status</th></tr>");
-                                                //                out.write("<tr><th></th><th>Mac Address</th><th>IP Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th><th>Connection Status</th></tr>");
                                                 int index = 0;
                                                 while (macList.hasMoreElements()) {
                                                     flag1 = true;
@@ -469,7 +429,7 @@
                                                     } else {
                                                         out.write("<tr><td>" + index + "</td><td><a href=deviceInformation.jsp?macAddr=" + macAddr + ">" + macAddr + "</a></td><td>" + device.getIp() + "</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td><td><b style='color:red'>Passive</b></td><td>" + (device.isInForeground()?"<b style='color:blue'>True</b>":"<b>False</b>") + "</td></tr>");
                                                     }
-                                                    //                  out.write("<tr><td>" + macAddr + "</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td><td>" + device.getExpOver() + "</td><td>" + device.isConnectionStatus() + "</td></tr>");
+                                                    
                                                 }
                                                 if (!flag1) {
                                                     out.write("<tr><td colspan='8' >No Clients!!!</td></tr>");
@@ -508,28 +468,28 @@
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -539,7 +499,7 @@
                 });
             });
         </script>
-
+<!-- 
       <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
@@ -547,7 +507,7 @@
 
             });
         </script>
-   
+    -->
 
     </body>
 

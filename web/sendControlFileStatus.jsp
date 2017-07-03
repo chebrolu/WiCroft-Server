@@ -1,7 +1,7 @@
 <%-- 
     Document   : sendControlFileStatus
     Created on : 17 Jan, 2017, 9:23:16 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 
@@ -23,8 +23,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css">
+        <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css">
     </head>
     <body>
 

@@ -1,7 +1,7 @@
 <%-- 
     Document   : processAction
     Created on : 22 Jul, 2016, 3:12:54 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -9,8 +9,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-             <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css">
+             <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css">
     </head>
     <body>
         <%
@@ -41,9 +41,6 @@
                 out.write("Other conditions");
 
             }
-            
-//
-
         %>
     </body>
 </html>

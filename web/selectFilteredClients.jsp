@@ -1,7 +1,7 @@
 <%-- 
     Document   : selectSelectedClients
     Created on : 4 Jun, 2017, 4:57:29 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -20,30 +20,27 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <h1>Hello World!</h1>
         <%
 
-
          if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
-//          response.setIntHeader("refresh", 5); // refresh in every 5 seconds
             CopyOnWriteArrayList<String> selectedMacs = new CopyOnWriteArrayList<String>();
             String username = (String)session.getAttribute("currentUser");
             Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
             
-              if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
+            if(mySession == null){
+                session.setAttribute("currentUser",null);
+                response.sendRedirect("login.jsp");
 
             }else{
 
             String macs[] = request.getParameterValues("selectedclient");    
             String module = request.getParameter("module");    
-//            System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4"+macs);
   
             if(module.equalsIgnoreCase("changeApSettings")){
                 mySession.getChangeApSelectedClients().clear();
@@ -53,7 +50,6 @@
                     }
                 }
                 mySession.setCurrentAction("changeApSettings");
-                // response.sendRedirect("configExperiment.jsp");
             }else if(module.equalsIgnoreCase("sendControlFile")){
                 mySession.getSendCtrlFileSelectedClients().clear();
                 if(macs != null){
@@ -62,7 +58,6 @@
                     }
                 }
                 mySession.setCurrentAction("sendControlFile");
-                // response.sendRedirect("configExperiment.jsp");
 
             }else if(module.equalsIgnoreCase("startExperiment")){
                 mySession.getStartExpSelectedClients().clear();
@@ -72,7 +67,6 @@
                     }
                 }
                 mySession.setCurrentAction("startExperiment");
-                // response.sendRedirect("configExperiment.jsp");
             }else if(module.equalsIgnoreCase("wakeUpTimer")){
                 mySession.getWakeUpTimerSelectedClients().clear();
                 if(macs != null){
@@ -81,7 +75,6 @@
                     }
                 }
                 mySession.setCurrentAction("wakeUpTimer");
-                // response.sendRedirect("utilities.jsp");
             }else if(module.equalsIgnoreCase("appUpdate")){
                 mySession.getAppUpdateSelectedClients().clear();
                 if(macs != null){
@@ -90,7 +83,6 @@
                     }
                 }
                 mySession.setCurrentAction("appUpdate");
-                // response.sendRedirect("utilities.jsp");
             }else if(module.equalsIgnoreCase("ReqLogFiles")){
                 mySession.getRequestLogFileSelectedClients().clear();
                 if(macs != null){
@@ -99,9 +91,7 @@
                     }
                 }
                 mySession.setCurrentAction("ReqLogFiles");
-                // response.sendRedirect("utilities.jsp");
             }else if(module.equalsIgnoreCase("reUseControlFile")){
-                //mySession.getSendOldCtrlFileSelectedClients().clear();
                 mySession.getSendCtrlFileSelectedClients().clear();
                 
                 if(macs != null){
@@ -110,7 +100,6 @@
                     }
                 }
                 mySession.setCurrentAction("reUseControlFile");
-                // response.sendRedirect("configExperiment.jsp");
             }
 
             response.sendRedirect("selectClients.jsp?closewindow=true");

@@ -20,19 +20,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CrowdSource Application-SERVER</title>
+    <title>Wicroft</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,17 +45,7 @@
 
 <body>
 
-    
-<!--    <div class="navbar-header" style="text-align: center" >
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" style="text-align: center" href="#">CrowdSource Application - SERVER</a>
-                </div>
--->
+
     <br/><br/>    <br/><br/>
 
     <div class="container">
@@ -101,21 +91,16 @@
                         String loginStatus = request.getParameter("loginStatus");
                         if(loginStatus != null){
                            if(loginStatus.equalsIgnoreCase("wrong_credentials")){
-//                                System.out.println("no user");
                                 out.write("<b style='color:red;'>Wrong Credentials</b>");
                             }else if(loginStatus.equalsIgnoreCase("db_exception")){
-//                                System.out.println("data");
                                 out.write("<b style='color:red;'>Database Exception, Login Failed</b>");
                             }else{
-                                //System.out.println("sucess");
                             }
                         }
                         %>
                     </div>
 
                 </div>
-
-                    
                       
                  <%
                      
@@ -124,35 +109,31 @@
                   }
                 
                 %>
-                
-                    
-                    
-                    
                     
             </div>
         </div>
     </div>
 
     <!-- jQuery -->
-    <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+    <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+    <script src="/wicroft/dist/js/sb-admin-2.js"></script>
     
-          <script type="text/javascript">
+<!--          <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
         </script>
-
+-->
 
 </body>
 

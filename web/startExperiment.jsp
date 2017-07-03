@@ -1,7 +1,7 @@
 <%-- 
     Document   : startExperiment
     Created on : 22 Jul, 2016, 5:59:41 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
@@ -30,22 +30,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -57,11 +57,7 @@
     </head>
 
     <body>
-
-
         <%
-            
-            
         if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
@@ -92,16 +88,9 @@
             int clientCount = mySession.getStartExpSelectedClients().size();
             Experiment exp = new Experiment(DBManager.getUserId(username),expNumber,expName,expLoc,expDesc,expFileId,expFileName,1);
             DBManager.startExperiment(exp);
-
 //          DBManager.stopExperiment(username, expNumber);
-
             Utils.startNewExperiment(expNumber, expName, expLoc, expDesc, expFileId, expFileName, nbrClientsPerRound, roundDuration,  expAckWaitTime, expRetryStartTime, expTimeOut, logBgTraffic, username, mySession, clientCount);
-
-
            response.sendRedirect("experimentStatus.jsp");
-            
-
-            
         }
         }
         %>

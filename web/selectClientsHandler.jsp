@@ -1,7 +1,7 @@
 <%-- 
     Document   : selectClientsHandler
     Created on : 4 Jun, 2017, 1:47:21 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -19,7 +19,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
 
@@ -29,17 +29,13 @@
                 response.sendRedirect("login.jsp");
             }else{
 
-
-//          mySession.getChangeApSelectedClients().clear();
-
             String username = (String)session.getAttribute("currentUser");
             Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
             
             
-              if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
-
+            if(mySession == null){
+                session.setAttribute("currentUser",null);
+                response.sendRedirect("login.jsp");
             }else{
             String filter = request.getParameter("filter");
             CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients(mySession);
@@ -47,14 +43,6 @@
             CopyOnWriteArrayList<String> temp2 = new CopyOnWriteArrayList<String>();
             String module = request.getParameter("module");
             String fileId = request.getParameter("fileid");
-
-            out.write(module+"\n");
-            out.write(fileId+"\n");
-
-
-            
-
-            out.write(module);
 
             if(module.equalsIgnoreCase("reUseControlFile")){
 
@@ -88,9 +76,6 @@
                         bssidList.add(bss);
                     }
                 }
-
-
-                //String bssid = request.getParameter("bssid");
                 
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
@@ -112,7 +97,6 @@
 
 
             }else if(filter.equals("ssid")){
-                //String ssid = request.getParameter("ssid");
 
                 String [] ssids =  request.getParameterValues("ssid");
                 CopyOnWriteArrayList<String> ssidList = new CopyOnWriteArrayList<String>();
@@ -123,7 +107,6 @@
                         ssidList.add(ss);
                     }
                 }
-
                 
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
@@ -141,7 +124,6 @@
                         }
                     }
                 }
-             
 
             }else if(filter.equals("random")){
                 
@@ -186,27 +168,21 @@
                     }
                 }
 
-                
             }else{
                 System.out.println(filter);
             }
 
-//                mySession.getSendOldCtrlFileSelectedClients().clear();
                 mySession.getSendCtrlFileSelectedClients().clear();
                 for(int i=0;i<temp1.size();i++){
-//                    mySession.getSendOldCtrlFileSelectedClients().add(temp1.get(i));
                     mySession.getSendCtrlFileSelectedClients().add(temp1.get(i));
                 }
                 for(int i=0;i<temp2.size();i++){
                     mySession.getSendCtrlFileSelectedClients().add(temp2.get(i));
-//                    mySession.getSendOldCtrlFileSelectedClients().add(temp2.get(i));
                 }
 
                 response.sendRedirect("selectClients.jsp?module="+module+"&fileid="+fileId);
 
-
             }else if(module.equalsIgnoreCase("startExperiment")){
-
 
                 int userId = DBManager.getUserId(username);
                 ResultSet rs = DBManager.getUserMacHavingCtrlFile(userId, Integer.parseInt(fileId));
@@ -223,15 +199,7 @@
                     }
                 }
 
-
-                
-
-
-
-
               if(filter.equals("bssid")){
-                
-
 
                 String [] bssids =  request.getParameterValues("bssid");
                 CopyOnWriteArrayList<String> bssidList = new CopyOnWriteArrayList<String>();
@@ -243,9 +211,6 @@
                     }
                 }
 
-
-                //String bssid = request.getParameter("bssid");
-                
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
              
@@ -266,7 +231,6 @@
 
 
             }else if(filter.equals("ssid")){
-                //String ssid = request.getParameter("ssid");
 
                 String [] ssids =  request.getParameterValues("ssid");
                 CopyOnWriteArrayList<String> ssidList = new CopyOnWriteArrayList<String>();
@@ -278,7 +242,6 @@
                     }
                 }
 
-                
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
                
@@ -355,17 +318,10 @@
 
                 response.sendRedirect("selectClients.jsp?module="+module+"&fileid="+fileId);
                 
-            
-
-
-
             }else{
-
 
             if(filter.equals("bssid")){
                 
-
-
                 String [] bssids =  request.getParameterValues("bssid");
                 CopyOnWriteArrayList<String> bssidList = new CopyOnWriteArrayList<String>();
 
@@ -376,12 +332,8 @@
                     }
                 }
 
-
-                //String bssid = request.getParameter("bssid");
-                
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
-             
 
                 if(clientsMac!=null){
                     while(clientsMac.hasMoreElements()){
@@ -397,7 +349,6 @@
 
 
             }else if(filter.equals("ssid")){
-                //String ssid = request.getParameter("ssid");
 
                 String [] ssids =  request.getParameterValues("ssid");
                 CopyOnWriteArrayList<String> ssidList = new CopyOnWriteArrayList<String>();
@@ -408,7 +359,6 @@
                         ssidList.add(ss);
                     }
                 }
-
                 
                 ConcurrentHashMap<String, DeviceInfo> client = mySession.getSelectedConnectedClients();
                 Enumeration<String> clientsMac = client.keys();
@@ -470,11 +420,6 @@
             }else{
                 System.out.println(filter);
             }
-
-
-
-
-
 
                 if(module.equalsIgnoreCase("changeApSettings")){
                     mySession.getChangeApSelectedClients().clear();

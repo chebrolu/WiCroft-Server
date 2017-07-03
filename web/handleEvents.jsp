@@ -1,7 +1,7 @@
 <%-- 
     Document   : handleEvents
     Created on : 7 Mar, 2017, 2:34:00 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 
@@ -22,7 +22,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <h1>Hello World!</h1>
@@ -40,28 +40,22 @@
 
             }else{
             if (request.getParameter("event") != null && request.getParameter("event").equalsIgnoreCase("clearlist")) {
-//                mySession.getConnectedClients().clear();
 
                 Enumeration<String> macs =   mySession.getSelectedConnectedClients().keys();
                   while(macs.hasMoreElements()){
                       String mac = macs.nextElement();
                       initilizeServer.getAllConnectedClients().remove(mac);
                   }
-                //mySession.getSelectedConnectedClients().clear();
                 response.sendRedirect("frontpage.jsp");
             }
-
             
             if (request.getParameter("event") != null && request.getParameter("event").equalsIgnoreCase("clearallbssidlist")) {
-//                mySession.getConnectedClients().clear();
                 mySession.getSelectedConnectedClients().clear();
                 mySession.getSelectedBssidInfo().clear();
                 initilizeServer.getAllBssidInfo().clear();
                 response.sendRedirect("settings.jsp");
             }
 
-
-            
             if (request.getParameter("event") != null && request.getParameter("event").equalsIgnoreCase("exitChangeApReq")) {
                 mySession.setChangeApRunning(false);
                 response.sendRedirect("apchangeStatusDetails.jsp?closewindow=true");
@@ -76,8 +70,6 @@
                 mySession.setFetchingLogFiles(false);
                 response.sendRedirect("utilities.jsp");
             }
-            
-            
         }}
 
         %>

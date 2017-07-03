@@ -13,26 +13,29 @@ import lombok.Setter;
  * @author ratheeshkv
  */
 public class Constants {
-
+    // Wicroft directory to store all log files, experiment details
     public static String experimentDetailsDirectory = "/home/cse/Downloads/Wicroft";
-//    public static String experimentDetailsDirectory = "/home/ratheeshkv/Downloads/Loadgenerator";
-
-//    public static boolean experimentRunning = false;
+    // log4j properties file location
+    public static String logfileLocation  = "/home/cse/Downloads/Wicroft";
     
-
-    public static String DB_USER_NAME = "root";
-    public static String DB_PASSWORD = "root123";//root123";
-    public static String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    public static String DB_URL = "jdbc:mysql://127.0.0.1/wicroftserver";
-    public static int ConnectionPORT = 8001;
+    //MySQL database information
+    public static String DB_USER_NAME = "root";  // username
+    public static String DB_PASSWORD = "root123";// password
+    public static String JDBC_DRIVER = "com.mysql.jdbc.Driver"; // mysql driver
+    public static String DB_URL = "jdbc:mysql://127.0.0.1/wicroftserver"; // URL to database 
     
+    public static int ConnectionPORT = 8001; // TCP connection port, listen for Wicroft app to connect
+    
+    public static int heartBeatAlive = 120;  // heartbeat threshold value, for classifying clients to active and passive
     
     public static DBManager dbManager = null;
-    public static Session currentSession = null;
     public static boolean listenOnPort = false;
     public static String configFile = "config.txt";
     public static String controlFile = "controlFile";
-    public static int heartBeatAlive = 120;  // in seconds
+    
+    /*
+        Used in JSON messages between client and server
+    */
     static final String sendControlFile = "controlFile";
     static final String stopExperiment = "stopExperiment";
     static final String getLogFiles = "getLogFiles";

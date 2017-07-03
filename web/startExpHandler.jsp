@@ -1,7 +1,7 @@
 <%-- 
     Document   : startExpHandler
     Created on : 17 Jan, 2017, 11:39:59 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 
@@ -26,26 +26,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-
-
-
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
 
@@ -73,7 +69,6 @@
         </script>
 
 
-
     </head>
 
     <body>
@@ -81,7 +76,7 @@
         <div id="wrapper">
 
             <!-- Navigation -->
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+          <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -89,7 +84,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -97,7 +92,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -113,53 +110,53 @@
                     <!-- /.dropdown -->
                 </ul>
                 <!-- /.navbar-top-links -->
- 
+
+               
                 <!-- /.navbar-static-side -->
-                
                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
 
 
-
-
-
-
-
-
-
-
-
-
             <%
-                
-                
-                
                 String file_info = request.getParameter("file_name");
                 
                 out.write("<br>"+file_info+"</br>");
                 String[] fileI = file_info.split("_");
                 String fileID = fileI[0];
-                
                 ConcurrentHashMap<String, Integer> Clients = DBManager.getControlFileUserInfo(fileID);
-                
-//                String MAC = rs.getString(2);
-//                String MAC = "cc:5f:bf:12:48:51 00:6F:64:1F:65:56 CC:3A:61:BC:3F:92 00:6F:64:81:9A:40 00:6F:64:85:26:54 cc:5f:bf:4b:cb:fd";
-//                String MAC = rs.getString(2);
-//                
-//                MAC=MAC.trim();
-//                String []macLIST = MAC.split(" ");
-//                ConcurrentHashMap<String, Integer> Clients = new ConcurrentHashMap<String, Integer>();
-//                for (int i = 0; i < macLIST.length; i++) {
-//                    Clients.put(macLIST[i], i);
-//                }
-                
-               
-//                rs = DBManager.getControlFileInfo();  
-
             %>
-
-
 
 
             <div id="page-wrapper">
@@ -213,19 +210,6 @@
                                                 <!--<input  class="form-control" type="text" id="fileName" name="file_name"/><i style='color:red;display: none' id='error'>Field Cannot be Empty</i>-->
                                             </div>
 
-
-
-
-
-
-
-
-
-                                            <!--                                           <div class="form-group">
-                                                                                            <label>Upload Control File</label>
-                                                                                            <input type="file" id="fileupload" name="fileupload">
-                                                                                        </div>
-                                            -->
                                             
                                              <div class="form-group">
                                                 <label>Experiment start time<i>(Seconds)</i><b style='color: red'>*</b></label>
@@ -249,11 +233,6 @@
                                                 <input type='submit' class='btn btn-default' value='Start Experiment'  onclick='return checkFields();' >                                                    
                                             </div>
 
-
-
-
-
-
                                         </div>
 
 
@@ -265,10 +244,6 @@
 
                             <!-- /.panel -->
                         </div>
-
-
-
-<!--expBuffTime, nbrReq, roundDur-->
 
                         <div class="col-lg-6">
                             <div class="panel panel-info">
@@ -324,307 +299,261 @@
                                         <tbody>
 
 
-                                            <%
-                                                                   session.setAttribute("filter", null);
-                                                                   session.setAttribute("clientcount", null);
+                    <%
+                               session.setAttribute("filter", null);
+                               session.setAttribute("clientcount", null);
 
-                                                                   if (request.getParameter("getclient") != null) {
+                               if (request.getParameter("getclient") != null) {
 
-                                                                       
-                                                                       
-                                                                       if (request.getParameter("filter").equals("bssid")) {
+                                   
+                                   
+                                   if (request.getParameter("filter").equals("bssid")) {
 
-                                                                           ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
-                                                                           Enumeration<String> macList = clients.keys();
-                                                                           if (clients != null) {
-               //                                                                out.write("<table border='1'>");
-               //                                                                out.write("<tr><th>No</th><th>Select</th><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th></tr>");
-                                                                               if (clients.size() == 0) {
-                                                                                   out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
-                                                                               } else {
-                                                                                   int i = 0;
-                                                                                   int flag = 0;
-                                                                                   
-                                                                                   ConcurrentHashMap<String, String> bssidList = new ConcurrentHashMap<String, String>();
-                                                                                   
-                                                                                   String arr[] = request.getParameterValues("bssid");
-                                                                                   for (int p = 0; p < arr.length; p++) {
-                                                                                       //out.write("<br>"+arr[p]+"--"+arr[p].length());
-                                                                                       if(arr[p].length() > 0){
-                                                                                           bssidList.put(arr[p],"1");
-                                                                                       }
-                                                                                    }
-                                                                                   
-                                                                                   
-                                                                                   CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
-                                                                                   
-                                                                                   while (macList.hasMoreElements()) {
-                                                                                       String macAddr = macList.nextElement();
-                                                                                       
-                                                                                       if(Clients != null && Clients.get(macAddr) != null ){
-                                                                                       
-                                                                                       
-                                                                                       DeviceInfo device = clients.get(macAddr);
+                                       ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
+                                       Enumeration<String> macList = clients.keys();
+                                       if (clients != null) {
 
-                                                                                       CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
-                                                                                       if (activeClient.contains(device)) {
-//                                                                                           if (request.getParameter("bssid").equalsIgnoreCase(device.getBssid())) {
-                                                                                               
-                                                                                           if (bssidList.get(device.getBssid()) != null){
-                                                                                               i++;
-                                                                                               flag = 1;
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           }
-                                                                                       }else{
-                                                                                           //if (request.getParameter("bssid").equalsIgnoreCase(device.getBssid())) {
-                                                                                           if(bssidList.get(device.getBssid()) != null){
-                                                                                               tempDeviceListMacAddr.add(macAddr);                                                                                             
-                                                                                              
-                                                                                           }
-                                                                                       }}
-                                                                                   }
-                                                                                   
-                                                                                   
-                                                                                    for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
-                                                                                        String mac = tempDeviceListMacAddr.get(j);
-                                                                                        DeviceInfo device = clients.get(mac);
-                                                                                        
-                                                                                        i++;
-                                                                                        flag = 1;
-                                                                                        out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                    }
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   if (flag == 0) {
-                                                                                       out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
-                                                                                   }
-                                                                               }
-               //                                                                out.write("</table>");
-                                                                           }
-                                                                       } else if (request.getParameter("filter").equals("ssid")) {
+                                           if (clients.size() == 0) {
+                                               out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
+                                           } else {
+                                               int i = 0;
+                                               int flag = 0;
+                                               
+                                               ConcurrentHashMap<String, String> bssidList = new ConcurrentHashMap<String, String>();
+                                               
+                                               String arr[] = request.getParameterValues("bssid");
+                                               for (int p = 0; p < arr.length; p++) {
+                                                   //out.write("<br>"+arr[p]+"--"+arr[p].length());
+                                                   if(arr[p].length() > 0){
+                                                       bssidList.put(arr[p],"1");
+                                                   }
+                                                }
+                                               
+                                               
+                                               CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
+                                               
+                                               while (macList.hasMoreElements()) {
+                                                   String macAddr = macList.nextElement();
+                                                   
+                                                   if(Clients != null && Clients.get(macAddr) != null ){
+                                                   
+                                                   
+                                                   DeviceInfo device = clients.get(macAddr);
 
-                                                                           ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
-                                                                           Enumeration<String> macList = clients.keys();
-                                                                           if (clients != null) {
-               //                                                                out.write("<table border='1'>");
-               //                                                                out.write("<tr><th>No</th><th>Select</th><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th></tr>");
-                                                                               if (clients.size() == 0) {
-                                                                                   out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
-                                                                               } else {
-                                                                                   int i = 0;
-                                                                                   int flag = 0;
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                    ConcurrentHashMap<String, String> ssidList = new ConcurrentHashMap<String, String>();
-                                                                                   
-                                                                                   String arr[] = request.getParameterValues("ssid");
-                                                                                   for (int p = 0; p < arr.length; p++) {
-                                                                                       //out.write("<br>"+arr[p]+"--"+arr[p].length());
-                                                                                       if(arr[p].length() > 0){
-                                                                                           ssidList.put(arr[p],"1");
-                                                                                       }
-                                                                                    }
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
-                                                                                   
-                                                                                   while (macList.hasMoreElements()) {
-                                                                                       String macAddr = macList.nextElement();
-                                                                                       
-                                                                                       if(Clients != null && Clients.get(macAddr) != null ){
-                                                                                       DeviceInfo device = clients.get(macAddr);
-                                                                                       CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
-                                                                                       if (activeClient.contains(device)) {
-//                                                                                           if (request.getParameter("ssid").equalsIgnoreCase(device.getSsid())) {
-                                                                                           if (ssidList.get(device.getSsid()) != null) {
-                                                                                               i++;
-                                                                                               flag = 1;
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           }
-                                                                                       }else{
-                                                                                           
-                                                                                           //if (request.getParameter("ssid").equalsIgnoreCase(device.getSsid())) {
-                                                                                           if (ssidList.get(device.getSsid()) != null) {
-                                                                                               tempDeviceListMacAddr.add(macAddr);                                                                                             
-                                                                                              
-                                                                                           }
-                                                                                           
-                                                                                       }
-                                                                                   }}
-                                                                                   
-                                                                                   
-                                                                                   for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
-                                                                                        String mac = tempDeviceListMacAddr.get(j);
-                                                                                        DeviceInfo device = clients.get(mac);
-                                                                                        
-                                                                                        i++;
-                                                                                        flag = 1;
-                                                                                        out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                    }
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   if (flag == 0) {
-                                                                                       out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
-                                                                                   }
-                                                                               }
-               //                                                                out.write("</table>");
-                                                                           }
+                                                   CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
+                                                   if (activeClient.contains(device)) {
+//                                                                  
+                                                           
+                                                       if (bssidList.get(device.getBssid()) != null){
+                                                           i++;
+                                                           flag = 1;
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       }
+                                                   }else{
+                                                       
+                                                       if(bssidList.get(device.getBssid()) != null){
+                                                           tempDeviceListMacAddr.add(macAddr); 
+                                                          
+                                                       }
+                                                   }}
+                                               }
+                                               
+                                               
+                                                for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
+                                                    String mac = tempDeviceListMacAddr.get(j);
+                                                    DeviceInfo device = clients.get(mac);
+                                                    
+                                                    i++;
+                                                    flag = 1;
+                                                    out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                }
+                                               
+                                               if (flag == 0) {
+                                                   out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
+                                               }
+                                           }
+                                       }
+                                   } else if (request.getParameter("filter").equals("ssid")) {
 
-                                                                       } else if (request.getParameter("filter").equals("manual")) {
+                                       ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
+                                       Enumeration<String> macList = clients.keys();
+                                       if (clients != null) {
+                                           if (clients.size() == 0) {
+                                               out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
+                                           } else {
+                                               int i = 0;
+                                               int flag = 0;
+                                               
+                                                ConcurrentHashMap<String, String> ssidList = new ConcurrentHashMap<String, String>();
+                                               
+                                               String arr[] = request.getParameterValues("ssid");
+                                               for (int p = 0; p < arr.length; p++) {
+                                                   //out.write("<br>"+arr[p]+"--"+arr[p].length());
+                                                   if(arr[p].length() > 0){
+                                                       ssidList.put(arr[p],"1");
+                                                   }
+                                                }
+                                               
+                                               CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
+                                               
+                                               while (macList.hasMoreElements()) {
+                                                   String macAddr = macList.nextElement();
+                                                   
+                                                   if(Clients != null && Clients.get(macAddr) != null ){
+                                                   DeviceInfo device = clients.get(macAddr);
+                                                   CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
+                                                   if (activeClient.contains(device)) {
+                                                       if (ssidList.get(device.getSsid()) != null) {
+                                                           i++;
+                                                           flag = 1;
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       }
+                                                   }else{
+                                                       
+                                                       if (ssidList.get(device.getSsid()) != null) {
+                                                           tempDeviceListMacAddr.add(macAddr);  
+                                                          
+                                                       }
+                                                       
+                                                   }
+                                               }}
+                                               
+                                               
+                                               for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
+                                                    String mac = tempDeviceListMacAddr.get(j);
+                                                    DeviceInfo device = clients.get(mac);
+                                                    
+                                                    i++;
+                                                    flag = 1;
+                                                    out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                }
+                                               
+                                               
+                                               
+                                               
+                                               if (flag == 0) {
+                                                   out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
+                                               }
+                                           }
+//                                                                out.write("</table>");
+                                       }
 
-                                                                           ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
-                                                                           Enumeration<String> macList = clients.keys();
-                                                                           if (clients != null) {
-               //                                                                out.write("<table border='1'>");
-               //                                                                out.write("<tr><th>No</th><th>Select</th><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th></tr>");
-                                                                               if (clients.size() == 0) {
-                                                                                   out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
-                                                                               } else {
-                                                                                   int i = 0;
-                                                                                   int flag = 0;
-                                                                                   CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
-                                                                                   
-                                                                                   while (macList.hasMoreElements()) {
-                                                                                       String macAddr = macList.nextElement();
-                                                                                       
-//                                                                                       if(Clients.get(macAddr)==null){
-//                                                                                           continue;
-//                                                                                       }
-                                                                                       
-                                                                                        if(Clients != null && Clients.get(macAddr) != null ){
-                                                                                       
-                                                                                       DeviceInfo device = clients.get(macAddr);
-                                                                                       CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
-                                                                                       if (activeClient.contains(device)) {
-                                                                                           i++;
-                                                                                           flag = 1;
-                                                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                       }else{
-                                                                                           tempDeviceListMacAddr.add(macAddr);             
-                                                                                               
-                                                                                       }
-                                                                                   }}
-                                                                                   
-                                                                                   
-                                                                                   for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
-                                                                                        String mac = tempDeviceListMacAddr.get(j);
-                                                                                        DeviceInfo device = clients.get(mac);
-                                                                                        
-                                                                                        i++;
-                                                                                        flag = 1;
-                                                                                        out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                    }
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   
-                                                                                   if (flag == 0) {
-                                                                                       out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
-                                                                                   }
-                                                                               }
-               //                                                                out.write("</table>");
-                                                                           }
+                                   } else if (request.getParameter("filter").equals("manual")) {
 
-                                                                       } else if (request.getParameter("filter").equals("random")) {
-               //                        session.setAttribute("filter", "random");
-               //                        session.setAttribute("clientcount", request.getParameter("random"));
+                                       ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
+                                       Enumeration<String> macList = clients.keys();
+                                       if (clients != null) {
+                                           if (clients.size() == 0) {
+                                               out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
+                                           } else {
+                                               int i = 0;
+                                               int flag = 0;
+                                               CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
+                                               
+                                               while (macList.hasMoreElements()) {
+                                                   String macAddr = macList.nextElement();
+                                    
+                                                    if(Clients != null && Clients.get(macAddr) != null ){
+                                                   
+                                                   DeviceInfo device = clients.get(macAddr);
+                                                   CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
+                                                   if (activeClient.contains(device)) {
+                                                       i++;
+                                                       flag = 1;
+                                                       out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                   }else{
+                                                       tempDeviceListMacAddr.add(macAddr);             
+                                                           
+                                                   }
+                                               }}
+                                               
+                                               
+                                               for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
+                                                    String mac = tempDeviceListMacAddr.get(j);
+                                                    DeviceInfo device = clients.get(mac);
+                                                    
+                                                    i++;
+                                                    flag = 1;
+                                                    out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                }
+                                               
+                                               
+                                               
+                                               
+                                               if (flag == 0) {
+                                                   out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
+                                               }
+                                           }
+//                                                                out.write("</table>");
+                                       }
 
-                                                                           ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
-                                                                           Enumeration<String> macList = clients.keys();
-                                                                           if (clients != null) {
-               //                                                                out.write("<table border='1'>");
-               //                                                                out.write("<tr><th>No</th><th>Select</th><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th></tr>");
-                                                                               if (clients.size() == 0) {
-                                                                                   out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
-                                                                               } else {
-                                                                                   int i = 0;
-                                                                                   int count = 0;
-                                                                                   int flag = 0;
-                                                                                   
-                                                                                   CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
-                                                                                    
-                                                                                   while (macList.hasMoreElements()) {
-                                                                                       String macAddr = macList.nextElement();
-                                                                                       
+                                   } else if (request.getParameter("filter").equals("random")) {
+
+
+                                       ConcurrentHashMap<String, DeviceInfo> clients = Constants.currentSession.getConnectedClients();
+                                       Enumeration<String> macList = clients.keys();
+                                       if (clients != null) {
+
+                                           if (clients.size() == 0) {
+                                               out.write("<tr><td colspan=\"7\">No Clients</td></tr>");
+                                           } else {
+                                               int i = 0;
+                                               int count = 0;
+                                               int flag = 0;
+                                               
+                                               CopyOnWriteArrayList<String> tempDeviceListMacAddr = new CopyOnWriteArrayList<String>();
+                                                
+                                               while (macList.hasMoreElements()) {
+                                                   String macAddr = macList.nextElement();
+                                                   
 //                                                                                       if(Clients.get(macAddr)==null){
 //                                                                                           continue;
 //                                                                                       }
 //                                                                                       
-                                                                                        if(Clients != null && Clients.get(macAddr) != null ){
-                                                                                       DeviceInfo device = clients.get(macAddr);
+                                                    if(Clients != null && Clients.get(macAddr) != null ){
+                                                   DeviceInfo device = clients.get(macAddr);
 
-                                                                                       CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
-                                                                                       
-                                                                                       if (activeClient.contains(device)) {
-                                                                                           i++;
-                                                                                           count++;
-                                                                                           flag = 1;
-                                                                                           if (count <= Integer.parseInt(request.getParameter("random"))) {
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           } else {
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\"   name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           }
-                                                                                       }else{
-                                                                                           
-                                                                                           tempDeviceListMacAddr.add(macAddr);  
-                                                                                           
-                                                                                         
-                                                                                       }
+                                                   CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
+                                                   
+                                                   if (activeClient.contains(device)) {
+                                                       i++;
+                                                       count++;
+                                                       flag = 1;
+                                                       if (count <= Integer.parseInt(request.getParameter("random"))) {
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       } else {
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\"   name='selectedclient' value=\"" + macAddr + "\"/></td><td>" + macAddr + "</td><td style='color:green'>Active</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       }
+                                                   }else{
+                                                       
+                                                       tempDeviceListMacAddr.add(macAddr);  
+                                                   }
 
-                                                                                   }}
-                                                                                   
-                                                                                   
-                                                                                   for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
-                                                                                        String mac = tempDeviceListMacAddr.get(j);
-                                                                                        DeviceInfo device = clients.get(mac);
-                                                                                        
-                                                                                          i++;
-                                                                                           count++;
-                                                                                           flag = 1;
-                                                                                           if (count <= Integer.parseInt(request.getParameter("random"))) {
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           } else {
-                                                                                               out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\"   name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
-                                                                                           } 
-                                                                                    }
-                                                                                   
-                                                                                  
-                                                                                   
-                                                                                   if (flag == 0) {
-                                                                                       out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
-                                                                                   }
-                                                                               }
-               //                                                                out.write("</table>");
-                                                                           }
-                                                                       }
-
-                                                                        
-                                                                        
-
-                                                                       /*mgr = new DBManager();
-                                  rs = DBManager.getClientList(mgr);
-                                  if (rs != null) {
-                                      out.write("<table style=\"overflow-y:auto\"><tr><th></th><th>MAC ADDRESS</th><th>SSID</th><th>BSSID</th></tr>");
-                                      while (rs.next()) {
-                                          out.write("<tr><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + rs.getString(1) + "\"/></td><td>" + rs.getString(1) + "</td><td>" + rs.getString(2) + "</td><td>" + rs.getString(3) + "</td>");
-                                      }
-                                      out.write("</table>");
-                                      out.write("<input type=\"submit\" id=\'addexperiment\' name=\'getclient\' value=\"Add Experiment\" />");
-                                  }
-                                  mgr.closeConnection();
-                                                                        */
-                                                                   }
-                                            %>                 
-
-
-
+                                               }}
+                                               
+                                               
+                                               for (int j = 0; j < tempDeviceListMacAddr.size(); j++) {
+                                                    String mac = tempDeviceListMacAddr.get(j);
+                                                    DeviceInfo device = clients.get(mac);
+                                                    
+                                                      i++;
+                                                       count++;
+                                                       flag = 1;
+                                                       if (count <= Integer.parseInt(request.getParameter("random"))) {
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\" checked  name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       } else {
+                                                           out.write("<tr><td>" + i + "</td><td><input type=\"checkbox\"   name='selectedclient' value=\"" + mac + "\"/></td><td>" + mac + "</td><td style='color:red'>Passive</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td></tr>");
+                                                       } 
+                                                }
+                                               
+                                               if (flag == 0) {
+                                                   out.write("<tr><td colspan=\"7\">No Active Client</td></tr>");
+                                               }
+                                           }
+                                       }
+                                   }
+                               }
+        %>                 
 
 
                                         </tbody>
@@ -646,35 +575,32 @@
             </div>
 
 
-
-
-
         </div>
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -750,13 +676,13 @@
         </script>
 
 
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
-        </script>
+        </script>-->
 
     </body>
 

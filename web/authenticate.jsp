@@ -10,8 +10,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css">    </head>
+        <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css">    </head>
     <body>
         <%
             

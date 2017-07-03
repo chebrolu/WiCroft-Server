@@ -1,7 +1,7 @@
 <%-- 
     Document   : homepage
     Created on : 22 Jul, 2016, 4:21:25 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page import="com.sun.java.swing.plaf.windows.resources.windows"%>
@@ -18,14 +18,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css"> 
+        <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css"> 
 
         <script>
             function refreshPage() {
                 alert("calllled");
             }
-
         </script>
 
     </head>
@@ -33,22 +32,16 @@
 
         <%
             response.setIntHeader("refresh", 5); // refresh in every 5 seconds
-%>
+        %>
 
         <table border='1'>
             <caption><h3>Status</h3></caption>
-         <!--   <tr><td>Server Status</td><td><%=(Constants.currentSession.isServerOn() ? "Running" : "Not Running")%></td></tr> --> 
             <tr><td>Experiment Status</td><td><%=(Constants.currentSession.isExperimentRunning() ? "Running" : "Not Running")%></td></tr>
             <tr><td>Number of Clients Connected</td><td><%=Constants.currentSession.getConnectedClients().size()%></td></tr>   
-
 
             <%
                 CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients();
             %>
-
-
-
-
             <tr><td>Number of Active Clients</td><td><%=activeClient.size()%></td></tr>   
             <tr><td>Number of Passive Clients</td><td><%=(Constants.currentSession.getConnectedClients().size() - activeClient.size())%></td></tr>   
 
@@ -80,21 +73,15 @@
                             out.write("<tr><td colspan='3' >No Clients!!!</td></tr>");
                         }
 
-
                     %>
         </table>
-
-
         <br/>
         <br/>
         <br/>
 
 
-
-
-
-
-        <%            if (request.getParameter("clearclientlist") != null) {
+        <% 
+            if (request.getParameter("clearclientlist") != null) {
                 Constants.currentSession.getConnectedClients().clear();
                 response.setIntHeader("refresh", 0); // refresh in every 5 seconds
             }
@@ -131,13 +118,9 @@
             </tr>
         </table>
 
-
-
-
-        <%//            out.write("<h3>List Of Connected Clients</h3>");
+        <%
                 }
                 out.write("<table border='1'>");
-                //                out.write("<tr><th>Mac Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th><th>Experiment status</th><th>Connection Status</th></tr>");
                 out.write("<tr><th></th><th>Mac Address</th><th>IP Address</th><th>SSID</th><th>BSSID</th><th>Last HeartBeat</th><th>Connection Status</th></tr>");
 
                 int index = 0;
@@ -153,7 +136,6 @@
                         out.write("<tr><td>" + index + "</td><td><a href=deviceInformation.jsp?macAddr=" + macAddr + ">" + macAddr + "</a></td><td>" + device.getIp() + "</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td><td><b style='color:red'>Passive</b></td></tr>");
                     }
 
-                    //                  out.write("<tr><td>" + macAddr + "</td><td>" + device.getSsid() + "</td><td>" + device.getBssid() + "</td><td>" + device.getLastHeartBeatTime() + "</td><td>" + device.getExpOver() + "</td><td>" + device.isConnectionStatus() + "</td></tr>");
                 }
 
                 if (!flag1) {
@@ -162,10 +144,7 @@
                 out.write("</table>");
             }
 
-
         %>
-
-
 
     </body>
 </html>

@@ -1,7 +1,7 @@
 <%-- 
     Document   : wakeupClientsStatus
     Created on : 10 Mar, 2017, 3:36:23 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 <%@page import="java.lang.Long"%>
 <%@page import="java.sql.ResultSet"%>
@@ -26,7 +26,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <h1>Hello World!</h1>
@@ -90,17 +90,11 @@
                 }
 
             }else if(filter.equalsIgnoreCase("clientSpecific")){
-                    // already selected clients
                 for(int i=0;i<mySession.getWakeUpTimerSelectedClients().size();i++){
-//                      System.out.println("Cllient "+mySession.getWakeUpTimerSelectedClients().get(i));
                     initilizeServer.getWakeUpClients().put(mySession.getWakeUpTimerSelectedClients().get(i), 1); 
                 }
             }
 
-//        for(int i=0;i<mySession.getWakeUpTimerSelectedClients().size();i++){
-//            System.out.println("Cllient "+mySession.getWakeUpTimerSelectedClients().get(i));
-//        }
-    
             Utils.sendWakeUpRequest(filter, duration, mySession);            
             response.sendRedirect("wakeupClientsView.jsp");
 

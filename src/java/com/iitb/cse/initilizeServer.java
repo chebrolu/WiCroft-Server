@@ -21,6 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.BasicConfigurator;
+
+import org.apache.log4j.PropertyConfigurator;
+import java.io.File;
 
 /**
  *
@@ -55,44 +59,80 @@ public class initilizeServer extends HttpServlet {
     @Getter
     @Setter
     public static ConcurrentHashMap<String, Integer> UserNameToInstacesMap;
-    
-    @Getter @Setter public static long startwakeUpDuration = 0;
-    @Getter @Setter public static long wakeUpDuration = 0;
-    @Getter @Setter public static String  wakeUpFilter = "";
-    @Getter @Setter public static ConcurrentHashMap<String, Integer> wakeUpClients = new ConcurrentHashMap<String, Integer>();
-    @Getter @Setter public static ConcurrentHashMap<String, String > wakeUpTimerFilteredClients = new ConcurrentHashMap<String, String >();
-        
-//    @Getter @Setter public static ConcurrentHashMap<String, DeviceInfo> connectedClients;
+    public static org.apache.log4j.Logger logger;
 
+    @Getter
+    @Setter
+    public static long startwakeUpDuration = 0;
+    @Getter
+    @Setter
+    public static long wakeUpDuration = 0;
+    @Getter
+    @Setter
+    public static String wakeUpFilter = "";
+    @Getter
+    @Setter
+    public static ConcurrentHashMap<String, Integer> wakeUpClients = new ConcurrentHashMap<String, Integer>();
+    @Getter
+    @Setter
+    public static ConcurrentHashMap<String, String> wakeUpTimerFilteredClients = new ConcurrentHashMap<String, String>();
+
+    /*
+        This function will be called once the apache tomcat server starts...
+     */
     public void init() throws ServletException {
 
-        System.out.println("***********Wicroft Server starting...************");
+        /*
+            Logger configuration : see log4j.properties for configuration informations
+         */
+        BasicConfigurator.configure();;
+        logger = org.apache.log4j.Logger.getLogger(initilizeServer.class);
+
+        if (!Constants.logfileLocation.endsWith("/")) {
+            Constants.logfileLocation = Constants.logfileLocation + "/";
+        }
+        // specify path for log4j location
+        String log4jConfigFile = Constants.logfileLocation + "log4j.properties";
+        PropertyConfigurator.configure(log4jConfigFile);
+
+        logger.info("***********Wicroft Server starting...************");
         allConnectedClients = new ConcurrentHashMap<String, DeviceInfo>();
         allBssidInfo = new ConcurrentHashMap<String, String>();
         UserNameToSessionMap = new ConcurrentHashMap<>();
         UserNameToInstacesMap = new ConcurrentHashMap<>();
-//      connectedClients = new ConcurrentHashMap<>();
 
+
+        /*
+            Creating Wicroft experiment directory
+         */
         File dir = new File(Constants.experimentDetailsDirectory);
         if (!dir.exists()) {
             try {
                 dir.mkdirs();
-                System.out.println("Wicroft Directory : " + Constants.experimentDetailsDirectory + " Created");
+                logger.info("Wicroft Directory : " + Constants.experimentDetailsDirectory + " Created");
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("Exception", ex);
             }
         } else {
-            System.out.println("Wicroft Directory : " + Constants.experimentDetailsDirectory + " Exists");
+            //logger.info("Wicroft Directory : " + Constants.experimentDetailsDirectory + " Exists");
+            logger.info("Wicroft Directory : " + Constants.experimentDetailsDirectory + " Exists");
         }
 
+        /*
+            Creating Database connection
+         */
         dbManager = new DBManager();
         boolean stat = dbManager.createConnection();
         if (stat) {
-            System.out.println("DB connection successful");
+            logger.info("DB connection successful");
+
         } else {
-            System.out.println("Unable to create DB connection");
+            logger.info("Unable to create DB connection");
         }
 
+        /*
+            Starting thread to open a connection socket
+         */
         Runnable run = new Runnable() {
             @Override
             public void run() {
@@ -103,34 +143,6 @@ public class initilizeServer extends HttpServlet {
         Thread t = new Thread(run);
         t.start();
 
-//        Constants.dbManager = new DBManager();
-//        Constants.dbManager.createConnection();
-//
-//        try {
-//
-//            connectionSocket = new ServerSocket(Constants.ConnectionPORT);
-//            while (true) {
-//                System.out.println("Listeninig on port.............");
-//                System.out.println("\nListening for Client to Connect on PORT " + Constants.ConnectionPORT + "......[" + Utils.getCurrentTimeStamp() + "]");
-//                final Socket sock = connectionSocket.accept();
-//                System.out.println("\nClient COnnected ...... [" + Utils.getCurrentTimeStamp() + "]");
-//                Runnable r = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        threadNo++;
-//                        ClientConnection.handleConnection(sock, threadNo);
-//                    }
-//                };
-//
-//                Thread t = new Thread(r);
-//
-//                t.start();
-//
-//            }
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//
-//        }
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

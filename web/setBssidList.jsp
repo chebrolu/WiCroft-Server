@@ -1,7 +1,7 @@
 <%-- 
     Document   : setBssidList.jsp
     Created on : 1 Jun, 2017, 1:00:07 AM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -18,7 +18,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Wicroft</title>
     </head>
     <body>
         <h1>Hello World!</h1>
@@ -26,8 +26,6 @@
 
         <%
             
-//            Constants.currentSession.allBssidInfo.clear();
-
             if(session.getAttribute("currentUser")== null){
                 response.sendRedirect("login.jsp");
             }else{
@@ -48,7 +46,6 @@
                 for (String bssid : currentBssids) { 
                     String ssid = initilizeServer.allBssidInfo.get(bssid);
                     if(ssid != null){
-//                      Constants.currentSession.allBssidInfo.put(bssid, ssid);
                         mySession.getSelectedBssidInfo().put(bssid, ssid);
                     }
                 }
@@ -60,7 +57,6 @@
                 for (String bssid : newBssids) { 
                     String ssid = initilizeServer.allBssidInfo.get(bssid);
                     if(ssid != null){
-//                        Constants.currentSession.allBssidInfo.put(bssid, ssid);
                           mySession.getSelectedBssidInfo().put(bssid, ssid);
                     }
                 }

@@ -1,7 +1,7 @@
 <%-- 
     Document   : accountSettings.jsp
     Created on : 1 Jun, 2017, 1:36:34 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -32,34 +32,26 @@
 
             String userName = request.getParameter("newusername");
             String password = request.getParameter("newpassword");
-//            System.out.println("1");
             int status = DBManager.createAccount(userName, password);
-//            out.write("status : "+status);
             response.sendRedirect("signup.jsp?&status="+status);
         } else if (action.equals("Create Account")) {
 
             String userName = request.getParameter("newusername");
             String password = request.getParameter("newpassword");
-//            System.out.println("1");
             int status = DBManager.createAccount(userName, password);
-//            out.write("status : "+status);
             response.sendRedirect("settings.jsp?action=createaccount&status="+status);
         } else if (action.equals("Delete Account")) {
 
             String userName = request.getParameter("username");
             String password = request.getParameter("password");
-//            System.out.println("2");
             int status = DBManager.deleteAccount(userName, password);
-//            out.write("status : "+status);
             response.sendRedirect("settings.jsp?action=deleteaccount&status="+status);
         } else if (action.equals("Change Password")) {
             
-            String userName = (String)session.getAttribute("currentUser");//
+            String userName = (String)session.getAttribute("currentUser");
             String oldpassword = request.getParameter("oldpassword");
             String newpassword = request.getParameter("resetpassword");
-//            out.write("3 :"+password+":");
             int status = DBManager.changePassword(userName, oldpassword, newpassword);
-//            out.write("status : "+status);
             response.sendRedirect("settings.jsp?action=changepwd&status="+status);
         } else {
             System.out.println("4");

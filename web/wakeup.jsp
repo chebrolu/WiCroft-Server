@@ -1,10 +1,8 @@
 <%-- 
     Document   : wakeup
     Created on : 10 Mar, 2017, 12:36:39 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
- 
-
 
 
 <%@page import="java.sql.ResultSet"%>
@@ -28,22 +26,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -59,7 +57,7 @@
         <div id="wrapper">
 
             <!-- Navigation -->
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+           <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -67,7 +65,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -75,7 +73,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -92,32 +92,48 @@
                 </ul>
                 <!-- /.navbar-top-links -->
 
-                 
+               
+                <!-- /.navbar-static-side -->
+                 <div id="links" class="navbar-default sidebar" role="navigation">
                 
-                
-                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
-
-
-
-
-
-
-
-
-
-
-
 
             <%
                 if (Constants.currentSession.isExperimentRunning()) {
                     response.sendRedirect("experimentStatus.jsp");
                 } else {
-
-
             %>
-
 
             <div id="page-wrapper">
                 <div class="row">
@@ -185,8 +201,6 @@
 
                                         </form>
                                     </div>
-
-
                                 </div>
                                 <!-- /.row (nested) -->
                             </div>
@@ -252,9 +266,6 @@
                 </div>
                 <!--end Row -->
 
-
-
-
             </div>
             <!-- /#page-wrapper -->
 
@@ -262,45 +273,40 @@
             %>
 
 
-
-
-
-
-
         </div>
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
-                                                    $(document).ready(function () {
-                                                        $('#dataTables-example').DataTable({
-                                                            responsive: true
-                                                        });
-                                                    });
+            $(document).ready(function () {
+                $('#dataTables-example').DataTable({
+                    responsive: true
+                });
+            });
         </script>
 
 
@@ -341,13 +347,13 @@
 
 
         </script>
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
-        </script>
+        </script>-->
 
 
 

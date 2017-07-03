@@ -1,7 +1,7 @@
 <%-- 
     Document   : getLogFilesReqStatus
     Created on : 7 Sep, 2016, 3:28:40 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 
@@ -27,22 +27,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -67,20 +67,13 @@
             }
 
             function checkField() {
-
-                //         alert("Hai" + document.getElementsByName("selected").length);
-
-
                 count = 0;
-
                 var list = document.getElementsByName("selected");
                 for (var i = 0; i < list.length; i++) {
                     if (list[i].checked == true) {
                         count++;
                     }
                 }
-
-                //                alert("HAI" + count);
 
                 if (count === 0) {
                     alert("No client selected");
@@ -89,9 +82,6 @@
                 return true;
 
             }
-
-
-
 
         </script>
 
@@ -106,23 +96,17 @@
         if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
-            //response.setIntHeader("refresh", 5); // refresh in every 5 seconds
-            
             String username = (String)session.getAttribute("currentUser");
             Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
             
               if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
-
-            }else{
-            CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients(mySession);
-
-
-            if(mySession.isReqLogFileRunning()){
-                response.setIntHeader("refresh", 5); // refresh in every 5 seconds
-            }
-
+                session.setAttribute("currentUser",null);
+                response.sendRedirect("login.jsp");
+                }else{
+                    CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients(mySession);
+                    if(mySession.isReqLogFileRunning()){
+                        response.setIntHeader("refresh", 5); // refresh in every 5 seconds
+                }
             
         %>
 
@@ -137,7 +121,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -145,7 +129,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -161,48 +147,97 @@
                     <!-- /.dropdown -->
                 </ul>
                 <!-- /.navbar-top-links -->
- 
+
+               
                 <!-- /.navbar-static-side -->
-                
                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
             <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2 class="page-header">Log Request Status</h2> &emsp;<button  class="btn btn-default" onclick="self.close()">Exit Page</button>
+                        <h3 class="page-header">Log Request Status &emsp; <button  class="btn btn-danger
+                        " onclick="self.close()">Exit Page</button></h3>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
 
-
-
-
-
-
-
-
-
- 
-                <!-- /.row -->
                 <form  role="form" action='getLogFiles.jsp' method='get'  onsubmit='return checkField(this);'>
+
+                <%
+                    if(!mySession.isReqLogFileRunning()){
+                %>  
+
+                <div class="col-lg-6">
+                        <br><br>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Log Request Retry 
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+
+
+                            <table>
+                                <tr><td>No. of requests per round</td><td>&emsp;:&emsp;</td><td><input  class="form-control" type="number" min='1' max='10000' value='5' id='numclients' name='reqLogNumClients'/></td></tr>
+                                <tr><td>&emsp;</td><td></td></tr>
+                                <tr><td>Duration between rounds</td><td>&emsp;:&emsp;</td><td><input  class="form-control" type="number" min='1' max='10000' value='10' id='duration' name='reqLogDuration'/></td></tr>
+                                <tr><td>&emsp;</td><td></td></tr>
+                                <tr><td><td></td></td><td><input type='submit' class='btn btn-danger' value='Retry Log Request' ></td></tr>
+                            </table>
+
+                            </div>
+                            <!-- .panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    
+                    <%
+                        }
+                    %>
+
+
+                <!-- /.row -->
+                
                 <input type="hidden" name="retryLogFile" value="true" />
 
-
-                    
-
-
-
-
-
-
-
-
                     <div class="row">
-                        <div class="col-lg-9"><br><br><br>
+                        <div class="col-lg-12"><br><br><br>
                             <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <b> Selected Clients Information</b>&emsp;&emsp;
+
                                     
                                 </div>
                                 <!-- /.panel-heading -->
@@ -218,47 +253,31 @@
                                                 <th>BSSID</th>
                                                 <th>SSID</th>
                                                 <th>Connection</th>
-                                 <!--                <th>Log File Request</th>
-                                                <th>Log File Received</th> -->
-                                                <th>Status</th>
-                                                <th>Details</th>
+                                                 <th>Status</th>
+                                                <th>Files Received</th>
 
                                             </tr>
                                         </thead>
                                         <tbody>
 
-
-                                            <%
-
-                                            
-
-                                            int count = 0;
-
+                <%
+                  int count = 0;
                   for(int i=0;i<mySession.getRequestLogFileSelectedClients().size();i++){
                         String macAddr = mySession.getRequestLogFileSelectedClients().get(i);
                         DeviceInfo device = initilizeServer.getAllConnectedClients().get(macAddr);
-                        //System.out.println("Req File Mac : "+macAddr+" Time : "+Utils.getCurrentTimeStamp());
                         count += 1;
                           if (activeClient.contains(device)) {
-                          out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:green'>Active</b></td><td>" + mySession.getRequestLogFileFilteredClients().get(macAddr) + "</td><td>"+device.getDetails()+"</td></tr>");
+                          out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:green'>Active</b></td><td>" + (mySession.getRequestLogFileFilteredClients().get(macAddr)==null?"-no info-":mySession.getRequestLogFileFilteredClients().get(macAddr)) + "</td><td>"+(device.getDetails()==""?"-no info-":device.getDetails())+"</td></tr>");
 
-//                            out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:green'>Active</b></td><td>" + (device.isGetlogrequestsend() ? "Sent" : "Not Send") + "</td><td>" + (device.isLogFileReceived() ? "Yes" : "No") + "</td><td>" + device.getDetails() + "</td></tr>");
                             } else {
-                            out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:red'>Passive</b></td><td>" + mySession.getRequestLogFileFilteredClients().get(macAddr) + "</td><td>"+device.getDetails()+"</td></tr>");
+                            out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:red'>Passive</b></td><td>" + (mySession.getRequestLogFileFilteredClients().get(macAddr)==null?"-no info-":mySession.getRequestLogFileFilteredClients().get(macAddr)) + "</td><td>"+(device.getDetails()==""?"-no info-":device.getDetails())+"</td></tr>");
 
-//                            out.write("<tr><td>" + count + "</td><td><input type='checkbox' name='selected' value='" + macAddr + "'></td><td>" + macAddr + "</td><td>" + device.getBssid() + "</td><td>" + device.getSsid() + "</td><td><b style='color:red'>Passive</b></td><td>" + (device.isGetlogrequestsend() ? "Sent" : "Not Send") + "</td><td>" + (device.isLogFileReceived() ? "Yes" : "No") + "</td><td>" + device.getDetails() + "</td></tr>");
-                            }
-                    }
-
+                       }
+                  }
 
                                             %>   
-
                                         </tbody>
                                     </table>
-                                    <!-- /.table-responsive -->
-
-
-
 
                                 </div>
                                 <!-- /.panel-body -->
@@ -266,74 +285,9 @@
                             <!-- /.panel -->
                         </div>
                         <!-- /.col-lg-12 -->
-
-
-
-
-                        <%
-                      
-                        if(!mySession.isReqLogFileRunning()){
-                            
-                       
-
-                    %>
-
-
-
-                <div class="col-lg-3">
-                        <br><br>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Log Retry 
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <div class="form-group">
-                                <label>Number of Log Requests<br/> Per Round<b style='color: red'>*</b></label>
-                                <input  class="form-control" type="text" value='5' id='numclients' name='reqLogNumClients'/><i style='color:red;display: none' id='error'>Field Cannot be Empty</i>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Duration between Rounds<br><i>(in seconds)</i><b style='color: red'>*</b></label>
-                                    <input  class="form-control" type="text" value='10' id='duration' name='reqLogDuration'/><i style='color:red;display: none' id='error'>Field Cannot be Empty</i>
-                                </div>
-
-                                <div class="form-group">
-                                    <!--<input type='submit' class='btn btn-default' value='Retry Log Request' onclick='return checkFields();' >-->                                                    
-                                    <input type='submit' class='btn btn-default' value='Retry Log Request' >                                                    
-                                </div>
-
-                            </div>
-                            <!-- .panel-body -->
-                        </div>
-                        <!-- /.panel -->
                     </div>
-
-                           
-                        </div>
-
-
-                    <%
-                        }
-                    %>
-
-
-
-                    </div>
-                    <!--end Row -->
-
-
 
                 </form>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -357,28 +311,28 @@
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -394,13 +348,13 @@
 
         </script>
 
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
-        </script>
+        </script>-->
 
 
 

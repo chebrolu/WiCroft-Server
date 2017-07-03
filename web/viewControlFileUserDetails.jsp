@@ -1,9 +1,8 @@
 <%-- 
     Document   : viewControlFileUserDetails
     Created on : 31 Jan, 2017, 12:08:50 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
-
 
 <%@page import="java.sql.ResultSet"%>
 <%@page import="com.iitb.cse.DBManager"%>
@@ -18,7 +17,6 @@
 <%@page import="com.iitb.cse.*"%>
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,22 +28,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -55,10 +53,7 @@
         <![endif]-->
 
     </head>
-
     <body>
-
-
 
         <div id="wrapper">
 
@@ -71,7 +66,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -79,7 +74,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -96,10 +93,41 @@
                 </ul>
                 <!-- /.navbar-top-links -->
 
-                
+               
                 <!-- /.navbar-static-side -->
-                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                 <div id="links" class="navbar-default sidebar" role="navigation">
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
 
               <%
@@ -107,50 +135,34 @@
                 if(session.getAttribute("currentUser")==null){
                     response.sendRedirect("login.jsp");
                 }else{
-                    //response.setIntHeader("refresh", 5); // refresh in every 5 seconds
-                    
                     String username = (String)session.getAttribute("currentUser");
                     Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
                     
-                      if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
+                    if(mySession == null){
+                    session.setAttribute("currentUser",null);
+                    response.sendRedirect("login.jsp");
 
-            }else{
+                }else{
                     Utils.getSelectedConnectedClients(mySession);
-
-
                     response.setIntHeader("refresh", 5);
-//                  ResultSet rs = DBManager.getDetailedExperimentReqStatus(Constants.currentSession.getCurrentExperimentId());
                     String fileId = request.getParameter("fileid");
                     ResultSet rs  = DBManager.getControlFileUserInfo(fileId,username);
-
-
                 %>
 
-
-
-            <div id="page-wrapper">
+                <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Control File User Info</h1>
+                        <h3 class="page-header">Control File : Client Information </h3>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
 
-              
-
-
                 <div class="row">
-                    <div class="col-lg-6">
-                        <div class="panel panel-default">
+                    <div class="col-lg-12">
+                        <div class="panel panel-primary">
                             <div class="panel-heading">
-                                Client Information 
-
                                 <%
-                                out.write("<br/> File ID : "+fileId);    
-                                 
-     
+                                out.write("<h3>File ID : "+fileId+"</h3>");    
                                 %>
 
                             </div>
@@ -180,10 +192,9 @@
                                                         "<td>"+(rs.getString(2)==null?"Not Send":rs.getString(2))+"</td>"+
                                                         "<td>"+(rs.getString(3)==null?"Not Received":rs.getString(3))+"</td>"+
                                                         "<td>"+(rs.getString(4).equals("0")?"No retry":rs.getString(4))+"</td>"+
-                                                        "<td>"+rs.getString(5)+"</td>"+
+                                                        "<td>"+rs.getString(6)+"</td>"+
                                                         "</tr>");
                                                     }
-                                                    
 
                                                 }else{
                                                     out.write("<tr><td colspan='6'>No Clients!!!</td></tr>");
@@ -212,28 +223,28 @@
         </div>
         <!-- /#wrapper -->
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -244,13 +255,13 @@
             });
         </script>
 
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
-        </script>
+        </script>-->
 
 
     </body>

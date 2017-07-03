@@ -1,7 +1,7 @@
 <%-- 
     Document   : utilities
     Created on : 30 May, 2017, 10:56:19 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 
@@ -27,22 +27,22 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>CrowdSource-ServerHandler</title>
+        <title>Wicroft</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="/serverplus/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- MetisMenu CSS -->
-        <link href="/serverplus/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+        <link href="/wicroft/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="/serverplus/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="/wicroft/dist/css/sb-admin-2.css" rel="stylesheet">
 
         <!-- Morris Charts CSS -->
-        <link href="/serverplus/vendor/morrisjs/morris.css" rel="stylesheet">
+        <link href="/wicroft/vendor/morrisjs/morris.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="/serverplus/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/wicroft/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -65,7 +65,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="frontpage.jsp">CrowdSource Application - SERVER</a>
+                    <a class="navbar-brand" href="frontpage.jsp">Wicroft Server</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -73,7 +73,9 @@
 
                     <!-- /.dropdown -->
                     <li class="dropdown">
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <%= session.getAttribute("currentUser") %>
                             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-user">
@@ -90,43 +92,62 @@
                 </ul>
                 <!-- /.navbar-top-links -->
 
-              
+               
                 <!-- /.navbar-static-side -->
-                
                  <div id="links" class="navbar-default sidebar" role="navigation">
-                </div>
+                
+                <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            
+                            <li>
+                                <a href="frontpage.jsp"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            </li>
+                            
+                            <li>
+                                <a href="configExperiment.jsp"><i class="fa fa-dashboard fa-fw"></i> Experiment Configuration</a>
+                            </li>
+                            
+                            <li>
+                                <a href="experimentDetails.jsp"><i class="fa fa-table fa-fw"></i> Experiment History</a>
+                            </li>
+                            
+                            <li>
+                                <a href="utilities.jsp"><i class="fa fa-dashboard fa-fw"></i> Utilities</a>
+                            </li>
+                            
+                            <li>
+                                <a href="details.jsp"><i class="fa fa-dashboard fa-fw"></i> Details</a>
+                            </li>
+                            
+                            <li>
+                                <a href="settings.jsp"><i class="fa fa-dashboard fa-fw"></i> Settings</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    </div>
+
             </nav>
 
 <%
       	if(session.getAttribute("currentUser")==null){
             response.sendRedirect("login.jsp");
         }else{
-            //response.setIntHeader("refresh", 5); // refresh in every 5 seconds
             
             String username = (String)session.getAttribute("currentUser");
             Session mySession = initilizeServer.getUserNameToSessionMap().get(username);
 
-              if(mySession == null){
-            session.setAttribute("currentUser",null);
-            response.sendRedirect("login.jsp");
-
+            if(mySession == null){
+                session.setAttribute("currentUser",null);
+                response.sendRedirect("login.jsp");
             }else{
-
-
-            CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients(mySession);
-            Utils.getSelectedConnectedClients(mySession);
-            ConcurrentHashMap<String, String> apConnection = Utils.getAccessPointConnectionDetails(mySession);
-            mySession.setCurrentAction("");
+                CopyOnWriteArrayList<DeviceInfo> activeClient = Utils.activeClients(mySession);
+                Utils.getSelectedConnectedClients(mySession);
+                ConcurrentHashMap<String, String> apConnection = Utils.getAccessPointConnectionDetails(mySession);
+                mySession.setCurrentAction("");
         %>
 
-
-
-
-
-            <div id="page-wrapper">
-        
-        
-        
+        <div id="page-wrapper">
         <div class="row">
                 <div class="col-lg-9">
                     
@@ -135,7 +156,7 @@
                         <div class="panel-body">
                             <div class="panel-group" id="accordion">
                                 
-                                <div class="panel panel-default">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Set Wake Up Timer</a>
@@ -144,7 +165,7 @@
                                     <div id="collapseOne" class="panel-collapse collapse">
                                         <div class="panel-body">
 
-                                    <form action="wakeupClientsStatus.jsp" target="_blank" method="get">
+                                    <form action="wakeupClientsStatus.jsp" target="_blank" onsubmit="return checkWakeUpTimer()" method="get">
                                     <div class="row">
                                         <div class="col-lg-7">
                                         <table border="0">
@@ -155,9 +176,8 @@
                                                 <td>&nbsp;&nbsp;Seconds</td>
                                             </tr>
 
-
                                             <tr>
-                                            <td>Filter &nbsp;&nbsp;: &nbsp;&nbsp;</td><td><br>
+                                            <td>Select Clients &nbsp;&nbsp;: &nbsp;&nbsp;</td><td><br>
                                              <div class="form-group">
                                                 <!--<label>Selects</label>-->
                                                 <select class="form-control" name='filter' id='filter' onchange="_check(this)">
@@ -170,13 +190,15 @@
                                             </div></td><td></td><td></td>
                                             </tr>
 
-
                                                 <tr>
                                             <td></td>
                                             <td> 
                                         <!--<label>Selects</label>-->
                                         <select class="form-control" name='bssid' id='selectonbssid' style="display: none;width: 300px" multiple size='10'>
-                                            <%  Enumeration<String> _bssidList = Utils.getAllBssids(mySession);
+                                        <option value="" disabled>use CTRL key to select multiple</option>
+                                            <% 
+                                                //out.write("<option value="" disabled>use CTRL to select multiple</option>");    
+                                                Enumeration<String> _bssidList = Utils.getAllBssids(mySession);
                                                 while (_bssidList.hasMoreElements()) {
                                                     String bssid = _bssidList.nextElement();
                                                     if(bssid != null && bssid.trim().length()>0){
@@ -193,12 +215,12 @@
                                         </td><td></td><td></td>
                                         </tr>
 
-
                                         <tr>
                                             <td></td>
                                             <td> 
                                         <!--<label>Selects</label>-->
                                         <select class="form-control" name='ssid' id='selectonssid' style="display: none" multiple size='10'>
+                                        <option value="" disabled>use CTRL key to select multiple</option>
                                             <%
                                                 Enumeration<String> _ssidList = Utils.getAllSsids(mySession);
                                                 while (_ssidList.hasMoreElements()) {
@@ -206,28 +228,23 @@
                                                     if(ssid != null && ssid.trim().length()>0){
                                                          out.write("<option value=\"" + ssid + "\">" + ssid + "</option>");
                                                     }
-                                                    
-                                                   
                                                 }
                                             %>
                                         </select>
                                          </td><td></td><td></td>
                                         </tr>
 
-                                                
-
-
                                     <tr>
                                         <td></td>
                                         <td> 
-                                      <a   class="form-control" name='selectClient' id='selectonclients' style="display: none;text-decoration: none;" href="selectClients.jsp?module=wakeUpTimer" target="_blank" >Select &nbsp; Clients &nbsp;</a>
+                                      <a   class="form-control" name='selectClient' id='selectonclients' style="display: none;text-decoration: none;" href="selectClients.jsp?module=wakeUpTimer&firsttime=yes" target="_blank" >Select &nbsp; Clients &nbsp;</a>
                                     
                                         </td><td id='selectedclients' style="display: none" ></td><td></td>
                                     </tr>
 
                                                     <tr>
                                                         <td></td>
-                                                        <td><br><input class='btn btn-default' type="submit" value="Start Timer"/></td>
+                                                        <td><br><input class='btn btn-danger' type="submit" value="Start Timer"/></td>
                                                         <td></td><td></td>
                                                     </tr>
                                                 </table>
@@ -239,15 +256,12 @@
                                         <%
                                             if(mySession.isWakeUpTimerRunning()){
                                          %>
-                                              <a style="color: white;text-decoration: none" target="_blank" href="wakeupClientsView.jsp"><button type="button" class="btn btn-primary">View &nbsp; Timer</button></a>  
+                                              <a style="color: white;text-decoration: none" target="_blank" href="wakeupClientsView.jsp"><button type="button" class="btn btn-success">View &nbsp; Timer</button></a>  
                                         <%
                                             }
                                         %>
                                         </div>
                                         </div>
-
-
-
 
                                         </div>
                                         </form>
@@ -258,7 +272,7 @@
                                 </div>
                                 
                                 
-                                <div class="panel panel-default">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Wicroft App Update</a>
@@ -267,15 +281,15 @@
                                     <div id="collapseTwo" class="panel-collapse collapse">
                                         <div class="panel-body">
                                         <div class="row">
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
 
-                                        <a style="color: black;text-decoration: none" target="_blank" href="selectClients.jsp?module=appUpdate"><button type="button" class="btn btn-default">Select &nbsp; Clients</button></a>  
+                                        <a style="color: black;text-decoration: none" target="_blank" href="selectClients.jsp?module=appUpdate&firsttime=yes"><button type="button" class="btn btn-outline btn-danger">Select &nbsp; Clients</button></a>  
 
                                         
                                         <br><br>
                                         <form action="updateAppHandler.jsp" method="get" target="_blank">
                                         
-                                        <input class='btn btn-default'  type="submit" value="Send Update Notification"/>
+                                        <input class='btn btn-danger'  type="submit" value="Send Update Notification"/>
                                         </div> 
                                         </form>
                                         <%
@@ -284,7 +298,7 @@
                                         <div class="col-lg-3">
                                         <!-- <br> -->
 
-                                        <a style="color: white;text-decoration: none" target="_blank" href="updateAppStatus.jsp"><button type="button" class="btn btn-primary">View &nbsp; Status</button></a>  
+                                        <a style="color: white;text-decoration: none" target="_blank" href="updateAppStatus.jsp"><button type="button" class="btn btn-success">View &nbsp; Status</button></a>  
 
                                         
                                         </div> 
@@ -299,7 +313,7 @@
                                 </div>
                                 
                                 
-                                <div class="panel panel-default">
+                                <div class="panel panel-primary">
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Request Log Files</a>
@@ -308,45 +322,41 @@
                             <div id="collapseThree" class="panel-collapse collapse">
                             <div class="panel-body">
                                 
-                                <form action="getLogFiles.jsp" target="_blank" method="get">
+                                <form action="getLogFiles.jsp" target="_blank" method="get" onsubmit="return checkReqLogFiles()">
                                 <input type="hidden" name="retryLogFile" value="false" />
 
                                 
                                 <div class="row">
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-6">
 
                                         <div class="form-group">
-                                        <a style="color: black;text-decoration: none" target="_blank" href="selectClients.jsp?module=ReqLogFiles"><button type="button" class="btn btn-default">Select &nbsp; Clients</button></a>
+                                        <a style="color: black;text-decoration: none" target="_blank" href="selectClients.jsp?module=ReqLogFiles&firsttime=yes"><button type="button" class="btn btn-outline btn-danger">Select &nbsp; Clients</button></a>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Number of Log Requests<br/> Per Round<b style='color: red'>*</b></label>
-                                            <input  class="form-control" type="text" value='5' id='numclients' name='reqLogNumClients'/><i style='color:red;display: none' id='error'>Field Cannot be Empty</i>
+                                            <input  class="form-control" type="number" value='5' id='reqlognumclients' min="1" max="10000000" name='reqLogNumClients'/>
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label>Duration between Rounds<br><i>(in seconds)</i><b style='color: red'>*</b></label>
-                                            <input  class="form-control" type="text" value='10' id='duration' name='reqLogDuration'/><i style='color:red;display: none' id='error'>Field Cannot be Empty</i>
+                                            <label>Duration between Rounds<br><i>(seconds)</i><b style='color: red'>*</b></label>
+                                            <input  class="form-control" type="number" value='10' id='reqlogduration' min="1" max="10000000" name='reqLogDuration'/>
                                         </div>
 
                                         <div class="form-group">
-                                            <input type='submit' class='btn btn-default' name='getLogFiles' value='Get Log Files' onclick='return checkFields();' >                                                    
+                                            <input type='submit' class='btn btn-danger' name='getLogFiles' value='Get Log Files' onclick='return checkFields();' >                                                    
                                         </div>
 
                                         </div>
 
                                         <div class="col-lg-3">
                                         <div class="form-group">
-                                        <a style="color: white;text-decoration: none" target="_blank" href="getLogFilesReqStatus.jsp"><button type="button" class="btn btn-primary">View &nbsp; Status</button></a>  
+                                        <a style="color: white;text-decoration: none" target="_blank" href="getLogFilesReqStatus.jsp"><button type="button" class="btn btn-success">View &nbsp; Status</button></a>  
                                         </div>
                                         </div>
 
                                     </div>
                                     </form>
-                                            
-                                            
-                                            
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -383,47 +393,38 @@
                 
             </div>
         
-        
-        
-        
-        
-        
-        
-        
-
-        
-         </div>
-                                                <%
-                                                    }}
-                                                    %>
+            </div>
+                        <%
+                            }}
+                            %>
             <!-- /#page-wrapper -->
 
         </div>
         <!-- /#wrapper -->
 
         <!-- jQuery -->
-        <script src="/serverplus/vendor/jquery/jquery.min.js"></script>
+        <script src="/wicroft/vendor/jquery/jquery.min.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="/serverplus/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/bootstrap/js/bootstrap.min.js"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
-        <script src="/serverplus/vendor/metisMenu/metisMenu.min.js"></script>
+        <script src="/wicroft/vendor/metisMenu/metisMenu.min.js"></script>
 
         <!-- Morris Charts JavaScript -->
-        <script src="/serverplus/vendor/raphael/raphael.min.js"></script>
-        <script src="/serverplus/vendor/morrisjs/morris.min.js"></script>
-        <script src="/serverplus/data/morris-data.js"></script>
+        <script src="/wicroft/vendor/raphael/raphael.min.js"></script>
+        <script src="/wicroft/vendor/morrisjs/morris.min.js"></script>
+        <script src="/wicroft/data/morris-data.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
         <!-- DataTables JavaScript -->
-        <script src="/serverplus/vendor/datatables/js/jquery.dataTables.min.js"></script>
-        <script src="/serverplus/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-        <script src="/serverplus/vendor/datatables-responsive/dataTables.responsive.js"></script>
+        <script src="/wicroft/vendor/datatables/js/jquery.dataTables.min.js"></script>
+        <script src="/wicroft/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+        <script src="/wicroft/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
         <!-- Custom Theme JavaScript -->
-        <script src="/serverplus/dist/js/sb-admin-2.js"></script>
+        <script src="/wicroft/dist/js/sb-admin-2.js"></script>
 
         <!-- Page-Level Demo Scripts - Tables - Use for reference -->
         <script>
@@ -434,13 +435,13 @@
             });
         </script>
 
-      <script type="text/javascript">
+<!--      <script type="text/javascript">
             $(document).ready(function () {
                 $('#links').load('navigation.html');
                 refresh();
 
             });
-        </script>
+        </script>-->
 
          <script type="text/javascript">
         var auto_refresh = setInterval(
@@ -455,6 +456,35 @@
 
         <script type="text/javascript">
             
+            function checkWakeUpTimer(){
+
+                if(document.getElementById('newTimer').value==null || document.getElementById('newTimer').value==""){
+                    alert("Timer value cannot be empty");
+                    return false;
+                }else if(document.getElementById('filter').value == "none"){
+                    alert("Please choose an option to select clients");
+                    return false;
+                }
+                return true;
+            }
+
+
+ 
+
+            function checkReqLogFiles(){
+                if(document.getElementById('reqlognumclients').value==null || document.getElementById('reqlognumclients').value==""){
+                    alert("No. of clients per round cannot be empty");
+                    return false;
+                }else if(document.getElementById('reqlogduration').value==null || document.getElementById('reqlogduration').value==""){
+                    alert("Duration cannot be empty");
+                    return false;
+                }
+                  return true;
+            }
+
+
+
+
             function _check() {
 
                 // alert("'"+document.getElementById('filter').value+"'");
@@ -489,11 +519,6 @@
                     document.getElementById('selectedclients').style.display = 'none';
                 }
             }
-
-
-
         </script>
-        
-        
     </body>
 </html>

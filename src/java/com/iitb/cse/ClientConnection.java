@@ -50,32 +50,39 @@ public class ClientConnection {
 
     static boolean acceptConnection = true;
 
+    /*
+        Create a socket and listen for clients to connect
+    */
     public static synchronized void startlistenForClients() {
         try {
-
+            
+            /*
+                If socket with port number is already open, then close it
+            */
             if (initilizeServer.listenSocket != null) {
                 try {
-                    System.out.println("Closing listening socket");
+                    initilizeServer.logger.info("Closing listening socket");
                     initilizeServer.listenSocket.close();
                     initilizeServer.listenSocket = null;
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    initilizeServer.logger.error("Exception",ex);;
                 }
 
                 try {
                     Thread.sleep(5000);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    initilizeServer.logger.error("Exception",ex);;
                 }
                 startlistenForClients();
             }
 
-            /*Creating new socket */
+            /*Creating new socket for clients to connect */
             initilizeServer.listenSocket = new ServerSocket(Constants.ConnectionPORT);
             while (true) {
-                System.out.println("\nListening for Client to Connect on PORT " + Constants.ConnectionPORT + "......[" + Utils.getCurrentTimeStamp() + "]");
+                initilizeServer.logger.info("Listening for Client to Connect on PORT " + Constants.ConnectionPORT);
+                // accept a client connection
                 final Socket sock = initilizeServer.listenSocket.accept();
-                System.out.println("\nClient Connected ...... [" + Utils.getCurrentTimeStamp() + "]");
+                initilizeServer.logger.info("Client Connected ......");
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
@@ -83,150 +90,54 @@ public class ClientConnection {
                         ClientConnection.handleConnection(sock, initilizeServer.threadNo);
                     }
                 };
-
+                // serve the connected client
                 Thread t = new Thread(r);
                 t.start();
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            initilizeServer.logger.error("Exception",ex);;
         }
     }
 
-    public static void stoplistenForClients(Session session) {
-
-        acceptConnection = false;
-        Constants.currentSession = null;
-        Constants.listenOnPort = false;
-
-        if (Constants.dbManager != null) {
-            Constants.dbManager.closeConnection();
-        }
-        Constants.dbManager = null;
-        try {
-            session.connectionSocket.close();
-            session.connectionSocket = null;
-            System.out.println("\nServer PORT Closed...Listening stopped!!!");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            //System.out.println("\nIOException : " + ex.toString() + "\n");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            //System.out.println("\nException" + ex.toString() + "\n");
-        }
-    }
-
-    public static void writeToMyLog(int expid, String macAdrress, String message) {
-
-        String location = "";
-
-        if (!Constants.experimentDetailsDirectory.endsWith("/")) {
-            location = Constants.experimentDetailsDirectory + "/";
-        }
-
-        location += Integer.toString(expid) + macAdrress + "_log.txt";
-        File file = new File(location);
-        try {
-            FileWriter fw = new FileWriter(file, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            Date date = new Date();
-            System.out.println(date);
-            bw.write(date.toString() + " --> " + message + "\n");
-            bw.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            //System.out.println("\nEXCEPTION [writeToMyLog]:" + ex.toString());
-        }
-    }
-
+    /*
+        Read from socket
+    */
     public static String readFromStream(Socket socket, DataInputStream din, DataOutputStream dos) throws IOException {
-//        synchronized (synchObj) {
 
         if (socket != null) {
-            System.out.println("\nTrying to read from socket (blocking...) My Socket:" + socket + " [" + Utils.getCurrentTimeStamp() + "]");
-//            synchronized (socket) {
-//            System.out.println("\nRead from socket [" +Utils.getCurrentTimeStamp()+"]");
+            initilizeServer.logger.info("Trying to read from socket (blocking...) My Socket:" + socket);
             String data = "";
             int length = din.readInt();
-            System.out.println("\n[Read] Json Msg length : " + length + " Socket:" + socket + "[" + Utils.getCurrentTimeStamp() + "]");
             for (int i = 0; i < length; ++i) {
                 data += (char) din.readByte();
-                //     System.out.println("\nR Read: Json length : "+(i+1)*8);
-                //     System.out.println("\nSuccess : Json byte");
             }
-//            System.out.println("\nSocket Read Success : Json byte Complete [" + Utils.getCurrentTimeStamp() + "]");
-            //         dos.writeInt(200);
-            //         System.out.println("\nR Success : Json Write 200");
-            //        dos.flush();
-            System.out.println("\nRead from Socket " + socket + " Success!!! [" + Utils.getCurrentTimeStamp() + "]");
-            /* try {
-//                if (din.available() > 0) {
-                    int length = din.readInt();
-                    System.out.println("\nR Json length : " + length);
-                    for (int i = 0; i < length; ++i) {
-                        data += (char) din.readByte();
-                        //     System.out.println("\nR Read: Json length : "+(i+1)*8);
-                        //     System.out.println("\nSuccess : Json byte");
-                    }
-                    System.out.println("\nR Success : Json byte Complete");
-                    //         dos.writeInt(200);
-                    //         System.out.println("\nR Success : Json Write 200");
-                    //        dos.flush();
-                    System.out.println("\nRead from Socket Success!!!");
- //               }
-            } catch (IOException ex) {
-                System.out.println("\n[1] IOEx :" + ex.toString() + "-->" + socket);
-            } catch (Exception ex) {
-                System.out.println("\n[2] Ex :" + ex.toString() + "-->" + socket);
-            }*/
             return data;
-//            }
         } else {
             return null;
         }
-
-        //}
     }
 
+    /*
+        Write to socket
+    */
     public static int writeToStream(DeviceInfo d, String json) throws IOException {
 
         if (d.socket != null) {
-//            System.out.println("\nTrying to Write to socket [" + Utils.getCurrentTimeStamp() + "]");
-//            synchronized (d.socket) {
-            System.out.println("\nWriting to socket [Mac:" + d.getMacAddress() + Utils.getCurrentTimeStamp() + "]");
+            initilizeServer.logger.info("Writing to socket [Mac:" + d.getMacAddress());
             int response = 200;
-
             d.outStream.writeInt(json.length());
-//            System.out.println("\n[Write] Json Length [" + Utils.getCurrentTimeStamp() + "]");
             d.outStream.writeBytes(json);
             d.outStream.flush();
-            System.out.println("\nWrite Success: Json String [Mac:" + d.getMacAddress() + Utils.getCurrentTimeStamp() + "]");
-
-            /*   try {
-//                synchronized (connObj) {
-                    d.outStream.writeInt(json.length());
-                    System.out.println("\nW Json Length");
-                    d.outStream.writeBytes(json);
-                    d.outStream.flush();
-                    System.out.println("\nW Success: Json String");
-  //              }
-                //d.outStream.writeInt(message.length());
-                //d.outStream.writeBytes(message);
-                //    d.outStream.flush();
-                //       response = d.inpStream.readInt();
-                System.out.println("\nWrite to Socket Success!!! Res:" + response);
-            } catch (IOException ex) {
-                System.out.println("\n[3] IOEx :" + ex.toString() + "-->" + d.socket);
-            } catch (Exception ex) {
-                System.out.println("\n[4] Ex :" + ex.toString() + "-->" + d.socket);
-            }*/
             return response;
-//            }
         } else {
-            System.out.println("\nNull Socket : Mac = " + d.macAddress);
+            initilizeServer.logger.info("Null Socket : Mac = " + d.macAddress);
             return 408;
         }
     }
 
+    /*
+        Thread for a client, all meesages are received from client
+    */
     static void handleConnection(Socket sock, int tid) {
 
         try {
@@ -243,20 +154,21 @@ public class ClientConnection {
             DataOutputStream dos = new DataOutputStream(out);
 
             while (true) {
-
+                // Read message from socket
                 String receivedData = ClientConnection.readFromStream(sock, dis, dos).trim();
                 if (receivedData == null || receivedData.equals("")) {
-                    System.out.println("\n[Empty/Null Data][" + tid + "]");
+                    initilizeServer.logger.info("[Empty/Null Data][" + tid + "]");
                 } else {
 
                     receivedData = receivedData.replace(":true,", ":\"true\",");
                     receivedData = receivedData.replace(":false,", ":\"false\",");
 
-                    System.out.println("\nReceived Msg : [" + Utils.getCurrentTimeStamp() + "]" + receivedData);
+                    initilizeServer.logger.info("Received :" + receivedData);
 
                     Map<String, String> jsonMap = null;
                     JSONParser parser = new JSONParser();
 
+                    
                     ContainerFactory containerFactory = new ContainerFactory() {
 
                         @SuppressWarnings("rawtypes")
@@ -273,12 +185,13 @@ public class ClientConnection {
                     };
 
                     try {
+                        // string to JSON parser
                         jsonMap = (Map<String, String>) parser.parse(receivedData, containerFactory);
 
                         if (jsonMap != null) {
 
                             String action = jsonMap.get(Constants.action);
-
+                            // heartbeat message
                             if (action.compareTo(Constants.heartBeat) == 0 || action.compareTo(Constants.heartBeat1) == 0 || action.compareTo(Constants.heartBeat2) == 0) {
 
                                 macAddress = jsonMap.get(Constants.macAddress);
@@ -292,105 +205,79 @@ public class ClientConnection {
                                     device.setInpStream(dis);
                                     device.setOutStream(dos);
 //------------------------------------------------------------------------------                                    
+// Logic for sending 'wake up' timer to clients
+//
                                     try {
                                         long wakeUptime = (initilizeServer.getWakeUpDuration()) - ((System.currentTimeMillis()) - initilizeServer.getStartwakeUpDuration()) / 1000;
-
+                                        // wakeup timer is on, and clients is not in foreground
                                         if (wakeUptime > 0 && !Boolean.parseBoolean(jsonMap.get(Constants.isInForeground))) {
-
+                                            // wakeup timer set on BSSID
                                             if (initilizeServer.getWakeUpFilter().equalsIgnoreCase("bssid")) {
 
                                                 if (initilizeServer.getWakeUpClients().get(jsonMap.get(Constants.bssid)) != null) {
                                                     String jsonString = Utils.getWakeUpClientsJson(Long.toString(wakeUptime));
                                                     Thread sendData = new Thread(new SendData(device, 9, jsonString));
                                                     sendData.start();
-                                                    System.out.println("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
+                                                    initilizeServer.logger.info("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
 
                                                 }
-
+                                            // wakeup timer set on SSID
                                             } else if (initilizeServer.getWakeUpFilter().equalsIgnoreCase("ssid")) {
 
                                                 if (initilizeServer.getWakeUpClients().get(jsonMap.get(Constants.ssid)) != null) {
                                                     String jsonString = Utils.getWakeUpClientsJson(Long.toString(wakeUptime));
                                                     Thread sendData = new Thread(new SendData(device, 9, jsonString));
                                                     sendData.start();
-                                                    System.out.println("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
+                                                    initilizeServer.logger.info("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
 
                                                 }
-
+                                            // wakeup timer set for all clients
                                             } else if (initilizeServer.getWakeUpFilter().equalsIgnoreCase("setToAll")) {
                                                 String jsonString = Utils.getWakeUpClientsJson(Long.toString(wakeUptime));
                                                 Thread sendData = new Thread(new SendData(device, 9, jsonString));
                                                 sendData.start();
-                                                System.out.println("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
-
+                                                initilizeServer.logger.info("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
+                                            // wakeup timer set for a specific client
                                             } else if (initilizeServer.getWakeUpFilter().equalsIgnoreCase("clientSpecific")) {
 
                                                 if (initilizeServer.getWakeUpClients().get(jsonMap.get(Constants.macAddress)) != null) {
                                                     String jsonString = Utils.getWakeUpClientsJson(Long.toString(wakeUptime));
                                                     Thread sendData = new Thread(new SendData(device, 9, jsonString));
                                                     sendData.start();
-                                                    System.out.println("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
+                                                    initilizeServer.logger.info("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
 
                                                 }
 
                                             }
 
                                         } else {
-                                            System.out.println("N0-Reply to HearBeat : WakeUp time : " + wakeUptime + " ForGround : " + jsonMap.get(Constants.isInForeground) + " [ " + macAddress + " ]");
+                                            initilizeServer.logger.info("N0-Reply to HearBeat : WakeUp time : " + wakeUptime + " ForGround : " + jsonMap.get(Constants.isInForeground) + " [ " + macAddress + " ]");
                                         }
                                     } catch (Exception ex) {
-                                        System.out.println("JSON parsing exception# :" + ex.toString());
-                                        ex.printStackTrace();
+                                        initilizeServer.logger.error("Exception",ex);;
                                     }}
 
-// ----------------------------------------------------------                                    
-/*
-    WAKEUP Timer Logic
-                                    try {
-                                        long wakeUptime = (Constants.currentSession.getWakeUpDuration()) - ((System.currentTimeMillis()) - Constants.currentSession.getStartwakeUpDuration()) / 1000;
-                                        if (wakeUptime > 0 && !Boolean.parseBoolean(jsonMap.get(Constants.isInForeground))) {
-                                            String jsonString = Utils.getWakeUpClientsJson(Long.toString(wakeUptime));
-                                            Thread sendData = new Thread(new SendData(Constants.currentSession.getCurrentExperimentId(), device, 9, jsonString));
-                                            sendData.start();
-                                            System.out.println("Reply to HearBeat : Sending WakeUp time : " + wakeUptime + "[ " + macAddress + " ]");
-
-                                        } else {
-                                            System.out.println("N0-Reply to HearBeat : WakeUp time : " + wakeUptime + " ForGround : " + jsonMap.get(Constants.isInForeground) + " [ " + macAddress + " ]");
-                                        }
-                                    } catch (Exception ex) {
-                                        System.out.println("JSON parsing exception# :" + ex.toString());
-                                        ex.printStackTrace();
-                                    }
-                                     */
-// -----------------------------------------------------------------------------
                                     String appversion = jsonMap.get(Constants.appversion);
                                     String deviceName = "";
                                     try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                         deviceName = jsonMap.get(Constants.devicename);
                                     } catch (Exception ex) {
-                                        System.out.println("JSON parsing exception* : " + ex.toString());
-                                        ex.printStackTrace();
+                                        initilizeServer.logger.error("Exception",ex);;
                                     }
 
                                     String androidVersion = "";
 
                                     try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                         androidVersion = jsonMap.get(Constants.androidVersion);
                                     } catch (Exception ex) {
-                                        System.out.println("JSON parsing exception*# : " + ex.toString());
-                                        ex.printStackTrace();
+                                        initilizeServer.logger.error("Exception",ex);;
                                     }
 
+                                      // userinfo update to database
                                     DBManager.updateAppUserHeartBeatInfo(macAddress, appversion, deviceName, androidVersion);
 
-                                    // heartbeat    
-                                    System.out.println("\n [" + tid + "] HeartBeat Received : " + macAddress + " " + (++count) + " [" + Utils.getCurrentTimeStamp() + "]");
+                                    if (device == null) { // Newconnection, first message from socket
 
-                                    if (device == null) { // first time from this device. ie new connection
-
-                                        System.out.println("<<<== 1 ==>>>");
                                         DeviceInfo newDevice = new DeviceInfo();
                                         newDevice.setIp(jsonMap.get(Constants.ip));
                                         newDevice.setAppversion(appversion);
@@ -406,45 +293,26 @@ public class ClientConnection {
                                         newDevice.setStorageSpace(Integer.parseInt(jsonMap.get(Constants.storageSpace)));
                                         newDevice.setBssidList(jsonMap.get(Constants.bssidList).split(";"));
                                         try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                             newDevice.setInForeground(Boolean.parseBoolean(jsonMap.get(Constants.isInForeground)));
                                         } catch (Exception ex) {
-                                            System.out.println("JSON parsing exception1 : " + ex.toString());
-                                            ex.printStackTrace();
+                                            initilizeServer.logger.error("Exception",ex);;
                                         }
 
                                         try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                             newDevice.setDeviceName(jsonMap.get(Constants.devicename));
                                         } catch (Exception ex) {
-                                            System.out.println("JSON parsing exception2 : " + ex.toString());
-                                            ex.printStackTrace();
+                                            initilizeServer.logger.error("Exception",ex);;
                                         }
 
                                         try {
                                             newDevice.setAndroidVersion(jsonMap.get(Constants.androidVersion));
                                         } catch (Exception ex) {
-                                            System.out.println("JSON parsing exception3 : " + ex.toString());
-                                            ex.printStackTrace();
+                                            initilizeServer.logger.info("JSON parsing exception3 : " + ex.toString());
+                                            initilizeServer.logger.error("Exception",ex);;
 
                                         }
 
-                                        // newDevice.setSsid(jsonMap.get(Constants.bssidList));
-                                        /* String apInfo = jsonMap.get(Constants.bssidList);
-
-                                    if (apInfo != null || !apInfo.equals("")) {
-                                          System.out.println("\nInside Bssid List1");
-                                        String[] bssidInfo = apInfo.split(";");
-                                        NeighbourAccessPointDetails[] obj = new NeighbourAccessPointDetails[bssidInfo.length];
-
-                                        for (int i = 0; i < bssidInfo.length; i++) {
-                                            String[] info = bssidInfo[i].split(",");
-                                            obj[i].setBssid(info[0]);
-                                            obj[i].setRssi(info[1]);
-                                            obj[i].setRssi(info[2]);
-                                        }
-                                        newDevice.setBssidList(obj);
-                                    }*/
+                                 
                                         Date date = Utils.getCurrentTimeStamp();
                                         newDevice.setLastHeartBeatTime(date);
                                         newDevice.setInpStream(dis);
@@ -463,10 +331,9 @@ public class ClientConnection {
                                     {
                                         if (newConnection) { // reconnection from same client
 
-                                            System.out.println("<<<== 2 ==>>>");
                                             if (device.thread != null) {
                                                 device.thread.interrupt();
-                                                System.out.println("\n!!!!!1[" + tid + "] Interrupting old thread [" + Utils.getCurrentTimeStamp() + "]");
+                                                initilizeServer.logger.info("Interrupting old thread, MAC:"+jsonMap.get(Constants.macAddress));
                                             }
 
                                             DeviceInfo newDevice = new DeviceInfo();
@@ -485,43 +352,25 @@ public class ClientConnection {
                                             newDevice.setBssidList(jsonMap.get(Constants.bssidList).split(";"));
 
                                             try {
-//                                                newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                                 newDevice.setInForeground(Boolean.parseBoolean(jsonMap.get(Constants.isInForeground)));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception");
-                                                ex.printStackTrace();
+                                                initilizeServer.logger.error("Exception",ex);;
                                             }
 
                                             try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                                 newDevice.setDeviceName(jsonMap.get(Constants.devicename));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception2 : " + ex.toString());
-                                                ex.printStackTrace();
+                                                initilizeServer.logger.error("Exception",ex);;
                                             }
 
                                             try {
                                                 newDevice.setAndroidVersion(jsonMap.get(Constants.androidVersion));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception3 : " + ex.toString());
-                                                ex.printStackTrace();
+                                                initilizeServer.logger.error("Exception",ex);;
 
                                             }
 
-                                            /* String apInfo = jsonMap.get(Constants.bssidList);
-                                        if (apInfo != null || !apInfo.equals("")) {
-                                            System.out.println("\nInside Bssid List");
-                                                    
-                                            String[] bssidInfo = apInfo.split(";");
-                                            NeighbourAccessPointDetails[] obj = new NeighbourAccessPointDetails[bssidInfo.length];
-                                            for (int i = 0; i < bssidInfo.length; i++) {
-                                                String[] info = bssidInfo[i].split(",");
-                                                obj[i].setBssid(info[0]);
-                                                obj[i].setRssi(info[1]);
-                                                obj[i].setRssi(info[2]);
-                                            }
-                                            newDevice.setBssidList(obj);
-                                        }*/
+                                     
                                             Date date = Utils.getCurrentTimeStamp();
                                             newDevice.setLastHeartBeatTime(date);
                                             newDevice.setInpStream(dis);
@@ -531,19 +380,13 @@ public class ClientConnection {
                                             newDevice.setThread(Thread.currentThread());
                                             newDevice.setConnectionStatus(true);
                                             newDevice.setGetlogrequestsend(false);
-                                            /*
-                                        remaining parameters needs to be added!!!
-                                             */
+                                           
                                             initilizeServer.allConnectedClients.remove(device.macAddress);
                                             initilizeServer.allConnectedClients.put(jsonMap.get(Constants.macAddress), newDevice);
 
-//// **********************                  if (session.filteredClients.contains(device)) {
-//                                                session.filteredClients.remove(device);
-//                                                session.filteredClients.add(newDevice);
-//                                            }
+
                                         } else { // heartbeat
 
-                                            System.out.println("<<<== 3!!! ==>>>");
 
                                             Date date = Utils.getCurrentTimeStamp();
                                             device.setAppversion(appversion);
@@ -554,29 +397,22 @@ public class ClientConnection {
                                             device.setSsid(jsonMap.get(Constants.ssid));
 
                                             try {
-//                                                device.setOsVersion(jsonMap.get(Constants.androidVersion));
                                                 device.setInForeground(Boolean.parseBoolean(jsonMap.get(Constants.isInForeground)));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception");
-                                                ex.printStackTrace();
+                                                initilizeServer.logger.error("Exception",ex);;
                                             }
 
                                             try {
-//                                            newDevice.setOsVersion(jsonMap.get(Constants.androidVersion));
                                                 device.setDeviceName(jsonMap.get(Constants.devicename));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception2 : " + ex.toString());
-                                                ex.printStackTrace();
+                                                initilizeServer.logger.error("Exception",ex);;
                                             }
 
                                             try {
                                                 device.setAndroidVersion(jsonMap.get(Constants.androidVersion));
                                             } catch (Exception ex) {
-                                                System.out.println("JSON parsing exception3 : " + ex.toString());
-                                                ex.printStackTrace();
-
+                                                initilizeServer.logger.error("Exception",ex);;
                                             }
-
                                             device.setLastHeartBeatTime(date);
                                             device.setInpStream(dis);
                                             device.setOutStream(dos);
@@ -584,9 +420,7 @@ public class ClientConnection {
                                             device.setConnectionStatus(true);
                                         }
                                     }
-//------------------  Getting all BSSID lists                          
-
-                                    System.out.println("Inside Bssid Update : " + initilizeServer.allBssidInfo.size());
+//------------------  Getting all BSSID lists : For dashboard settings                        
 
                                     initilizeServer.allBssidInfo.put(jsonMap.get(Constants.bssid), jsonMap.get(Constants.ssid));
 
@@ -603,43 +437,39 @@ public class ClientConnection {
                                                 try {
                                                     ssid = info[0].trim();
                                                 } catch (Exception ex) {
-                                                    System.out.println("BssidList Update index:0 " + ex.toString());
+                                                    initilizeServer.logger.info("BssidList Update index:0 " + ex.toString());
                                                 }
                                                 try {
                                                     bssid = info[1].trim();
                                                 } catch (Exception ex) {
-                                                    System.out.println("BssidList Update index:1 " + ex.toString());
+                                                    initilizeServer.logger.info("BssidList Update index:1 " + ex.toString());
                                                 }
                                                 initilizeServer.allBssidInfo.put(bssid, ssid);
                                             }
                                         }
                                     }
                                      */
-                                    System.out.println("Bssid Update : " + initilizeServer.allBssidInfo.size());
 
 //------------------          
                                 }
-                            } else if (action.compareTo(Constants.experimentOver) == 0) {
+                                
+                            } 
+                            /*
+                                Experiment Over messge
+                            */
+                            else if (action.compareTo(Constants.experimentOver) == 0) {
 
                                 
                                 macAddress = jsonMap.get(Constants.macAddress);
-
-                                System.out.println("\n[" + tid + "] Experiment [No:" + jsonMap.get(Constants.experimentNumber) + "] Over Mesage received [MAC: " + macAddress + " " + Utils.getCurrentTimeStamp() + "]");
-                                // experiment over
-                                // i need mac address from here
-                                // ip and port also preferred
+                                
                                 DeviceInfo device = initilizeServer.allConnectedClients.get(jsonMap.get(Constants.macAddress));
 
                                 if (device == null) { // new connection
 
-                                    System.out.println("<<<== 4 ==>>>");
-
                                     DeviceInfo newDevice = new DeviceInfo();
                                     newDevice.setIp(jsonMap.get(Constants.ip));
                                     newDevice.setPort(Integer.parseInt(jsonMap.get(Constants.port)));
                                     newDevice.setMacAddress(jsonMap.get(Constants.macAddress));
-                                    //Date date = Utils.getCurrentTimeStamp();
-                                    //newDevice.setLastHeartBeatTime(date);
                                     newDevice.setInpStream(dis);
                                     newDevice.setOutStream(dos);
                                     newDevice.setSocket(sock);
@@ -652,31 +482,24 @@ public class ClientConnection {
                                     String[] info = jsonMap.get(Constants.experimentNumber).split("_");
 
                                     if (DBManager.updateExperimentOverStatus(Integer.parseInt(info[0]), newDevice.getMacAddress(), Integer.parseInt(info[1]))) {
-                                        System.out.println("\nDB Update ExpOver Success [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver : DB Update Success");
                                     } else {
-                                        System.out.println("\nDB Update ExpOver Failed [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver : DB Update Failed");
                                     }
 
-                                    /*
-                                        remaining parameters needs to be added!!!
-                                     */
                                     initilizeServer.allConnectedClients.put(jsonMap.get(Constants.macAddress), newDevice);
 
                                 } else if (newConnection) { // reconnction from the same client
 
-                                    System.out.println("<<<== 5 ==>>>");
-
                                     if (device.thread != null) {
                                         device.thread.interrupt();
-                                        System.out.println("\n@#2[" + tid + "] Interrupting old thread [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("Interrupting old thread, MAC: " +jsonMap.get(Constants.macAddress));
                                     }
 
                                     DeviceInfo newDevice = new DeviceInfo();
                                     newDevice.setIp(jsonMap.get(Constants.ip));
                                     newDevice.setPort(Integer.parseInt(jsonMap.get(Constants.port)));
                                     newDevice.setMacAddress(jsonMap.get(Constants.macAddress));
-                                    //Date date = Utils.getCurrentTimeStamp();
-                                    //newDevice.setLastHeartBeatTime(date);
                                     newDevice.setInpStream(dis);
                                     newDevice.setOutStream(dos);
                                     newDevice.setSocket(sock);
@@ -685,32 +508,23 @@ public class ClientConnection {
                                     newDevice.setGetlogrequestsend(false);
                                     newDevice.setConnectionStatus(true);
 
-                                    /*
-                                        remaining parameters needs to be added!!!
-                                     */
                                     newDevice.setExpOver(1); //
 
                                     String[] info = jsonMap.get(Constants.experimentNumber).split("_");
 
                                     if (DBManager.updateExperimentOverStatus(Integer.parseInt(info[0]), newDevice.getMacAddress(), Integer.parseInt(info[1]))) {
-                                        System.out.println("\nDB Update ExpOver Success [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver1 : DB Update Success MAC["+device.getMacAddress()+"]");
                                     } else {
-                                        System.out.println("\nDB Update ExpOver Failed [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver1 : DB Update Failed MAC["+device.getMacAddress()+"]");
                                     }
 
                                     initilizeServer.allConnectedClients.remove(device.macAddress);
                                     initilizeServer.allConnectedClients.put(jsonMap.get(Constants.macAddress), newDevice);
 
-//// **********************          if (session.filteredClients.contains(device)) {
-//                                        session.filteredClients.remove(device);
-//                                        session.filteredClients.add(newDevice);
-//                                    }
+
                                 } else {
 
-                                    System.out.println("<<<== 6 ==>>>");
-
-                                    // alread connected client
-                                    // device.setExpOver(jsonMap.get(Constants.macAddress))
+                                    // alread connected client (not the first message)
                                     device.setConnectionStatus(true);
                                     device.setSocket(sock);
                                     device.setExpOver(1); //
@@ -718,43 +532,39 @@ public class ClientConnection {
                                     String[] info = jsonMap.get(Constants.experimentNumber).split("_");
 
                                     if (DBManager.updateExperimentOverStatus(Integer.parseInt(info[0]), device.getMacAddress(), Integer.parseInt(info[1]))) {
-                                        System.out.println("\nDB Update ExpOver Success [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver2 : DB Update Success MAC["+device.getMacAddress()+"]");
                                     } else {
-                                        System.out.println("\nDB Update ExpOver Failed [" + Utils.getCurrentTimeStamp() + "]");
+                                        initilizeServer.logger.info("ExpOver2 : DB Update Failed MAC["+device.getMacAddress()+"]");
                                     }
 
                                 }
 
-                            } else if (action.compareTo(Constants.expacknowledgement) == 0) {
+                            }
+                            /*
+                                Experiment ACK messge
+                            */
+                            else if (action.compareTo(Constants.expacknowledgement) == 0) {
 
                                 String[] info = jsonMap.get(Constants.experimentNumber).split("_");
 
                                 int userid = Integer.parseInt(info[0]);
                                 int expNumber = Integer.parseInt(info[1]);
-
-//                                System.out.println("\nExperiment number : " + expNumber);
-                                System.out.println("\nUser " + userid + " Experiment [No:" + expNumber + "] Acknowledgement Received --> [ MAC: " + macAddress + " " + Utils.getCurrentTimeStamp() + "]");
-                                //int sessionId = Utils.getCurrentSessionID();
-///important                                int expId =1;// Utils.getCurrentExperimentID(Integer.toString(1));
-//                                System.out.println("\nExperiment number : " + expNumber + "== " + expId);
-
-                                //            if (expNumber == expId) {
+                                
                                 if (macAddress != null && !macAddress.equals("")) {
                                     DeviceInfo device = initilizeServer.allConnectedClients.get(macAddress);
-// **********************           session.actualFilteredDevices.add(device);
-//                                    System.out.println("\n Ack : " + expNumber + " Acknowledgement Received!!! [" + Utils.getCurrentTimeStamp() + "]");
 
                                     if (DBManager.updateExpStartReqSendStatus(expNumber, macAddress, 2, "Received Exp Ack", userid)) {
-                                        System.out.println("\n Ack : " + expNumber + " DB updated Successfully");
+                                        initilizeServer.logger.info("ExpAck : " + expNumber + " DB update Success MAC["+macAddress+"]");
                                     } else {
-                                        System.out.println("\n Ack : " + expNumber + " DB updation Failed");
+                                        initilizeServer.logger.info("ExpAck : " + expNumber + " DB update Failed MAC["+macAddress+"]");
                                     }
-///important                                        Utils.addExperimentDetails(expId, device, false);
                                 }
                                 //              }
-                                // update the db.
-                            } else if (action.compareTo(Constants.controlFileacknowledgement) == 0) {
-                                // {"action":"ack","fileid":"281"}
+                            } 
+                            /*
+                                Control file ACK messge
+                            */
+                            else if (action.compareTo(Constants.controlFileacknowledgement) == 0) {
                                 try {
 
                                     String[] user_fileid = jsonMap.get(Constants.fileId).split("_");
@@ -762,110 +572,67 @@ public class ClientConnection {
                                     int fileid = Integer.parseInt(user_fileid[1]);
                                     if (macAddress != null && !macAddress.equals("")) {
                                         DeviceInfo device = initilizeServer.allConnectedClients.get(macAddress);
-                                        if (DBManager.updateControlFileReceivingDetails(userid, fileid, macAddress, 2, "Ctrl File Ack received")) {// updateControlFileSendStatus(expNumber, macAddress, 1, "Successfully sent Control File")) {
-                                            System.out.println("\n Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updated Successfully");
+                                        if (DBManager.updateControlFileReceivingDetails(userid, fileid, macAddress, 2, "Ctrl File Ack received")) {
+                                            initilizeServer.logger.info(" Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updated Successfully");
                                         } else {
-                                            System.out.println("\n Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updation Failed");
+                                            initilizeServer.logger.info(" Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updation Failed");
                                         }
                                     }
                                 } catch (Exception ex) {
-                                    ex.printStackTrace();
+                                    initilizeServer.logger.error("Exception",ex);;
                                 }
-
-//                                System.out.println("\nControl FIle Acknowledgement Received --> [MAC: " + macAddress + "  " + Utils.getCurrentTimeStamp() + "]");
-//                                int fileid = Integer.parseInt(jsonMap.get(Constants.fileId));
-//                                System.out.println("\nFileID  : " + fileid);
-//                                //int sessionId = Utils.getCurrentSessionID();
-//                                int expId = 1;
-/////important                                int expId =1;// Utils.getCurrentExperimentID(Integer.toString(1));
-//                                //      System.out.println("\nExperiment number : " + expNumber + "== " + expId);
-//
-//                                //            if (expNumber == expId) {
-//                                if (macAddress != null && !macAddress.equals("")) {
-//                                    DeviceInfo device = initilizeServer.allConnectedClients.get(macAddress);
-//                                    // session.actualFilteredDevices.add(device);
-//                                    System.out.println("\n Control File Ack  Mac : " + macAddress + " Fid: " + fileid + " Acknowledgement Received!!! [" + Utils.getCurrentTimeStamp() + "]");
-//
-//                                    Constants.currentSession.getControlFileSendingSuccessClients().put(macAddress, "File sent & Ack received");
-//
-//                                    if (Constants.currentSession.getControlFileSendingStatus().get(device.getMacAddress()) == null) {
-//                                        Constants.currentSession.getControlFileSendingStatus().put(device.getMacAddress(), "Control File Ack : Received");
-//                                    } else {
-//                                        String _status = Constants.currentSession.getControlFileSendingStatus().get(device.getMacAddress());
-//                                        _status += "<br>Control File Ack : Received";
-//                                        Constants.currentSession.getControlFileSendingStatus().put(device.getMacAddress(), _status);
-//                                    }
-//
-//                                    if (DBManager.addControlFileSendingDetails(userid, fileid, macAddress)) {// updateControlFileSendStatus(expNumber, macAddress, 1, "Successfully sent Control File")) {
-//                                        System.out.println("\n Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updated Successfully");
-//                                    } else {
-//                                        System.out.println("\n Control File Ack : MAC: " + macAddress + " Fid: " + fileid + " DB updation Failed");
-//                                    }
-/////important                                        Utils.addExperimentDetails(expId, device, false);
-//                                }
-                                //              }
-                                // update the db.
-                            } else if (action.compareTo(Constants.userEmail) == 0) {
+                            }
+                            /*
+                                User details (email)
+                            */
+                            else if (action.compareTo(Constants.userEmail) == 0) {
 
                                 macAddress = jsonMap.get(Constants.macAddress);
-                                System.out.println("\nUser Info Received --> [MAC: " + macAddress + "" + Utils.getCurrentTimeStamp() + "]");
                                 if (macAddress != null && !macAddress.equalsIgnoreCase("")) {
-                                    /*if (macAddress.equals("") || macAddress == null) {
-                                    macAddress = jsonMap.get(Constants.macAddress);                                    
-                                }*/
                                     String email = jsonMap.get(Constants.email);
-//                                    String appVersion = "";
-//                                    appVersion = jsonMap.get(Constants.appversion);
-                                    DBManager.updateAppUserInfo(email, macAddress);
-                                    //updateAppUserInfo(String email, String username, String contactinfo){
+                                    if(DBManager.updateAppUserInfo(email, macAddress)){
+                                        initilizeServer.logger.info("UserInfo MAC: " + macAddress + " DB update Success");
+                                    }else{
+                                        initilizeServer.logger.info("UserInfo MAC: " + macAddress + " DB update Failed");
+                                    }
                                 }
 
                             } else {
-                                System.out.println("\n[" + tid + "] Some Other Operation...");
+                                initilizeServer.logger.info("[" + tid + "] Some Other Operation...");
                             }
                             newConnection = false;
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace();
-                        // System.out.println("Json Ex : " + ex.toString());
+                        initilizeServer.logger.error("Exception",ex);;
                     }
                 }
 
                 try {
                     Thread.sleep(5000);  // wait for interrupt
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                    //System.out.println("\n[" + tid + "] InterruptedException 1 : " + ex.toString() + "\n");
-
+                    initilizeServer.logger.error("Exception",ex);;
                     try {
                         sock.close();
                     } catch (IOException ex1) {
-                        ex1.printStackTrace();
-                        //System.out.println("\n[" + tid + "] IOException5 : " + ex1.toString() + "\n");
+                        initilizeServer.logger.error("Exception",ex1);;
                     }
                     break; //
                 }
             }
 
         } catch (IOException ex) {
-            ex.printStackTrace();
-            //System.out.println("\n [" + tid + "] IOException1 : " + ex.toString() + "\n");
+            initilizeServer.logger.error("Exception",ex);;
             try {
                 sock.close();
-                //    initilizeServer.connectedClients.remove(conn);
             } catch (IOException ex1) {
-                ex1.printStackTrace();
-                //System.out.println("\n[" + tid + "] IOException2 : " + ex1.toString() + "\n");
+                initilizeServer.logger.error("Exception",ex1);;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
-            //System.out.println("\n[" + tid + "] IOException3 : " + ex.toString() + "\n");
+            initilizeServer.logger.error("Exception",ex);;
             try {
                 sock.close();
-                //    initilizeServer.connectedClients.remove(conn);
             } catch (IOException ex1) {
-                ex1.printStackTrace();
-                //System.out.println("\n[" + tid + "] IOException4 : " + ex1.toString() + "\n");
+                initilizeServer.logger.error("Exception",ex1);;
             }
         }
 

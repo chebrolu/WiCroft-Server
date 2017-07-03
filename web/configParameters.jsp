@@ -1,7 +1,7 @@
 <%-- 
     Document   : configParameters
     Created on : 15 Sep, 2016, 11:26:13 PM
-    Author     : cse
+    Author     : ratheeshkv
 --%>
 
 <%@page import="java.util.Enumeration"%>
@@ -11,8 +11,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>CrowdSource</title>
-        <link rel="stylesheet" href="/serverplus/css/table.css">
+        <title>Wicroft</title>
+        <link rel="stylesheet" href="/wicroft/css/table.css">
 
 
         <script>
@@ -69,8 +69,6 @@
 
             <table class='table1'>
 
-
-
                 <tr><td>
                         Select Clients Based on :
                         <select name='filter' id='filter' onchange="_check(this)">
@@ -92,8 +90,6 @@
                             %>
                         </select>
 
-
-
                         <select name='ssid' id='selectonssid' style="display: none">
                             <%
                                 Enumeration<String> ssidList = Utils.getAllSsids();
@@ -104,24 +100,15 @@
                             %>
                         </select>
 
-
                         <input type="number" id ='random' name='random' value='1' min="1" max="5" style="display: none" />
-
-
 
                     </td></tr>
 
                 <tr><td></td><td><input type="submit" class='button' id='getclient' name='getclient' value="Get_Clients"  style="display: none"/></td></tr>
 
-                <!--             <tr><td></td><td> <a href="apchange.jsp?getclient=geclient&" id='getclient' name='getclient'  style="display: none">Get_Clients</a></td></tr>-->
-
-
             </table>
 
-
-
         </form>
-
 
     </body>
 </html>
